@@ -67,7 +67,6 @@ function countRank(counts, rankIndex) {
 		}
 	}
 	return ranks;
-	//console.log(ranks);
 }
 
 function countTops(counts) {
@@ -89,7 +88,6 @@ function countTops(counts) {
 	}
 	
 	return tops;
-	//console.log(ranks);
 }
 
 function showMonthUI(ym) {
@@ -108,7 +106,6 @@ function showMonthUI(ym) {
 		if (i*1 < 10 && tmp[i].v > 0) ydiff[tmp[i].s].rank = i*1+1;
 		if (i*1 >= tmp.length - 10 && tmp[i].v < 0) ydiff[tmp[i].s].rank = -(tmp.length-i*1);
 	}
-	//console.log(diff);
 	
 	var html = '<h1>台北捷運<select id="selYM">';
 	for (var i in months) {
@@ -250,6 +247,22 @@ function showStationUI(sta) {
 	$('#main').html(html);
 }
 
+function setUI() {
+	var val = decodeURIComponent((window.location.hash + '').replace(/^#/, ''));
+	if (val.match(/^201\d{3}$/)) {
+		showMonthUI(val);
+	} else if (counts[val]) {
+		showStationUI(val);
+	} else {
+		showMonthUI(months[months.length-1]);
+	}
+}
+
+function setUrl(val) {
+	window.location.hash = '' + val;
+	setUI();
+}
+
 var months;
 var counts;
 var ranks;
@@ -265,13 +278,13 @@ function init() {
 		rankIndex = {};
 		ranks = countRank(counts, rankIndex);
 		tops = countTops(counts);
-		showMonthUI(months[months.length-1]);
+		setUI();
 	});
 }
 
-$(document).on('change', "#selYM", function() { showMonthUI($(this).val()); } );
-$(document).on('change', "#selSta", function() { showStationUI($(this).val()); } );
-$(document).on('click', "td.sta", function() { showStationUI($(this).text()); } );
-$(document).on('click', "td.ym", function() { showMonthUI($(this).data('val')+''); } );
+$(document).on('change', "#selYM", function() { setUrl($(this).val()); } );
+$(document).on('change', "#selSta", function() { setUrl($(this).val()); } );
+$(document).on('click', "td.sta", function() { setUrl($(this).text()); } );
+$(document).on('click', "td.ym", function() { setUrl($(this).data('val')); } );
 
 init();
