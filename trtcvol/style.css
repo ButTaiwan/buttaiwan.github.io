@@ -1,4 +1,4 @@
-body { background: #000; color: #bbb; font-family: Courier }
+body { background: #000; color: #bbb; font-family: 'Signika Negative', sans-serif; }
 #main { width: 900px; margin: 0 auto }
 }
 a { color: #bbb !important }
@@ -17,14 +17,15 @@ tr.x { height: 8px }
 
 .r { text-align: right }
 .rd { background: #006 }
-.up { color: #f00 }
+.up { color: #f07 }
 .dn { color: #0f0 }
 
 .c, .p, .n { text-align: right }
 .p { color: #888 }
 .n { color: #444 }
 
-.sta, .ym { text-align: center; font-weight: bold; cursor: pointer; border-bottom: 2px solid #000; border-radius: 15px; color: #fff; text-shadow: 1px 1px 1px #000 }
+.sta, .ym { text-align: center; font-weight: bold; cursor: pointer }
+.sta { border-bottom: 2px solid #000; border-radius: 15px; color: #fff; text-shadow: 1px 1px 1px #000 }
 .sbg { position:  width: 100% }
 
 .curr { color: #fff }

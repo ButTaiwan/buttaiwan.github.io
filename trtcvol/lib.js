@@ -6,7 +6,8 @@ Date.prototype.toKey = function() { return this.getFullYear() + '' + (this.getMo
 function ymKey(dstr) { return new Date(dstr).toKey(); }
 function lastMonthKey(ym) { return new Date(ym.substr(0, 4)*1, ym.substr(4, 2)*1-2, 1).toKey(); }
 function lastYearKey(ym) { return new Date(ym.substr(0, 4)*1-1, ym.substr(4, 2)*1-1, 1).toKey(); }
-function toText(ym) { return (ym.substr(0, 4)*1-1911) + '年' + (ym.substr(4, 2)*1) + '月'; };
+//function toText(ym) { return (ym.substr(0, 4)*1-1911) + '年' + (ym.substr(4, 2)*1) + '月'; };
+function toText(ym) { return (ym.substr(0, 4)*1) + '年' + (ym.substr(4, 2)*1) + '月'; };
 	
 Number.prototype.cut = function() {
 	var s = this + '';
@@ -27,7 +28,7 @@ function loadData(res, colors) {
 	
 	for (var i=1; i<res.feed.entry.length; i++) {
 		var sta = res.feed.entry[i].title.$t;
-		colors[sta] = res.feed.entry[i][colorKey].$t.split(',');
+		colors[sta] = res.feed.entry[i][colorKey].$t.replace(/\d+[A]?/g, '').split(',');
 		counts[sta] = {};
 		for (var key in res.feed.entry[i]) {
 			if (! dateMap[key]) continue;
@@ -75,15 +76,16 @@ function countTops(counts) {
 	for (var sta in counts) {
 		var tmp = [];
 		for (var ym in counts[sta]) {
-			tmp.push({'ym': ym, 'c': counts[sta][ym] || 0});
+			if (counts[sta][ym]) tmp.push({'ym': ym, 'c': counts[sta][ym]});
 		}
 		tmp.sort(function(a, b) { return (a.c == b.c) ? 0 : (a.c < b.c ? 1 : -1); });
 		
 		tops[sta] = {};
 		for (var i in tmp) {
-			if (tmp[i].c == 0) continue;
+			//if (tmp[i].c == 0) continue;
 			var ym = tmp[i].ym;
-			tops[sta][ym] = i*1+1;
+			if (i*1 < 20) tops[sta][ym] = i*1+1;
+			else if (i >= tmp.length-10) tops[sta][ym] = i*1-tmp.length;
 		}
 	}
 	
@@ -149,7 +151,14 @@ function showMonthUI(ym) {
 			if (counts[sta][months[m]] > counts[sta][ym]) newRecord = false;
 		}
 		
-		html += '<td>' + (newRecord ? '*' : '') + (tops[sta][ym] <= 3 ? '(' + tops[sta][ym] + ')' : '') + '</td>';
+		html += '<td>' + (newRecord ? '*' : '');
+		if (tops[sta][ym] > 0 && tops[sta][ym] <= 3) {
+			html += '<span class="up">' + (' ①②③④⑤'.charAt(tops[sta][ym]*1)) + '</span>';
+		} else if (tops[sta][ym] < 0 && tops[sta][ym] >= -3) {
+			html += '<span class="dn">' + (' ①②③④⑤'.charAt(-tops[sta][ym]*1)) + '</span>';
+		}
+		html += '</td>';
+		// ①②③④⑤⑥⑦⑧⑨⑩
 		
 		if (counts[sta][lmym]) {
 			html += '<td class="c">' + counts[sta][lmym].toLocaleString() + '</td>';
@@ -182,7 +191,7 @@ function showMonthUI(ym) {
 	html += '<li>資料來源：台北捷運公司 <a href="https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136" target="_blank">https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136</a><br>';
   	html += '計算方式：（入站+出站）/營運日數';
 	html += '<li>若本月運量為通車以來最高，則以「*」註記。';
-	html += '<li>括號內數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前3高的月份。';
+	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">③</span>高與前<span class="dn">③</span>低的月份。';
 	html += '<li><span class="rd">&nbsp;&nbsp;&nbsp;</span>色塊內「<span class="up">↑</span>」及「<span class="dn">↓</span>」分別表示該車站名次比上月上升及下降（數字為排名數）；';
 	html += '「<span class="up">▲</span>」及「<span class="dn">▼</span>」分別表示運量比去年同期成長及衰退最多之車站（數字為依成長或衰退百分比排名之名次）。';
 	html += '</ol>';
@@ -216,7 +225,13 @@ function showStationUI(sta) {
 		if (!counts[sta][ym]) continue;
 		if (ym.substr(4, 2) == '01') html += '<tr class="x"></tr>';
 		
-		html += '<td class="r">' + (tops[sta][ym] < 10 ? '(' + tops[sta][ym] + ')' : '') + '</td>';
+		html += '<tr class="z">';
+		if (tops[sta][ym] > 0 && tops[sta][ym] <= 10) {
+			html += '<td class="r up">' + (' ①②③④⑤⑥⑦⑧⑨⑩'.charAt(tops[sta][ym]*1)) + '</td>';
+		} else if (tops[sta][ym] < 0 && tops[sta][ym] >= -5) {
+			html += '<td class="r dn">' + (' ①②③④⑤⑥⑦⑧⑨⑩'.charAt(-tops[sta][ym]*1)) + '</td>';
+		} else { html += '<td class="r"></td>'; }
+		
 		html += '<td class="ym" data-val="' + ym + '">' + toText(ym) + '</td>';
 		html += '<td class="c curr">' + counts[sta][ym].toLocaleString() + '</td>';
 		html += '<td>' + (counts[sta][ym] > maxVal ? '*' : '') + '</td>';
@@ -240,7 +255,7 @@ function showStationUI(sta) {
 	html += '<ol id="note">';
 	html += '<li>資料來源：台北捷運公司 <a href="https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136" target="_blank">https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136</a><br>';
   	html += '計算方式：（入站+出站）/營運日數';
-	html += '<li>括號順位是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前9高的月份。';
+	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">⑩</span>高與前<span class="dn">⑤</span>低的月份。';
 	html += '<li>若本月運量為通車以來最高，則以「*」註記。';
 	html += '</ol>';
 	
@@ -286,5 +301,6 @@ $(document).on('change', "#selYM", function() { setUrl($(this).val()); } );
 $(document).on('change', "#selSta", function() { setUrl($(this).val()); } );
 $(document).on('click', "td.sta", function() { setUrl($(this).text()); } );
 $(document).on('click', "td.ym", function() { setUrl($(this).data('val')); } );
+window.onpopstate = setUI;
 
 init();
