@@ -1,0 +1,37 @@
+body { background: #000; color: #bbb; font-family: Courier }
+a { color: #bbb !important }
+h1 { font-size: 28px; font-family: 'Microsoft JhengHei', sans-serif; color: #fff; text-align: center; font-weight: normal }
+select { font-size: 26px; font-family: 'Microsoft JhengHei', sans-serif; color: #fff; background: #000; padding: 0 4px; margin: 0 4px }
+
+table { width: 900px; margin: 0 auto; border-collapse: collapse }
+#note { width: 860px; margin: 0 auto; font-size: 19px; line-height: 1.6; border-top: 3px double #aaa; padding-top: 6px; margin-top: 6px  }
+th { border-bottom: 3px double #aaa; padding-bottom: 6px !important }
+
+th, td { font-size: 19px; padding: 2px 3px }
+th { vertical-align: bottom; color: #fff; white-space: nowrap }
+tr.z:hover { background: #242 }
+tr.x { height: 8px }
+
+.r { text-align: right }
+.rd { background: #006 }
+.up { color: #f00 }
+.dn { color: #0f0 }
+
+.c, .p, .n { text-align: right }
+.p { color: #888 }
+.n { color: #444 }
+
+.sta, .ym { text-align: center; font-weight: bold; cursor: pointer; border-bottom: 2px solid #000; border-radius: 15px; color: #fff; text-shadow: 1px 1px 1px #000 }
+.sbg { position:  width: 100% }
+
+.curr { color: #fff }
+
+.h { width: 300px }
+.bar { background: #770; display: block }
+
+.cBL { background: #0072C6 }
+.cBR { background: #AA753F }
+.cO { background: #FCA311; color: #000 }
+.cG { background: #007C59 }
+.cR { background: #D12D33 }
+.cY { background: #F7DB17 }
