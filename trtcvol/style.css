@@ -1,10 +1,13 @@
 body { background: #000; color: #bbb; font-family: Courier }
+#main { width: 900px; margin: 0 auto }
+}
 a { color: #bbb !important }
 h1 { font-size: 28px; font-family: 'Microsoft JhengHei', sans-serif; color: #fff; text-align: center; font-weight: normal }
+h2 { text-align: center; margin: 100px 0; font-size: 40px }
 select { font-size: 26px; font-family: 'Microsoft JhengHei', sans-serif; color: #fff; background: #000; padding: 0 4px; margin: 0 4px }
 
-table { width: 900px; margin: 0 auto; border-collapse: collapse }
-#note { width: 860px; margin: 0 auto; font-size: 19px; line-height: 1.6; border-top: 3px double #aaa; padding-top: 6px; margin-top: 6px  }
+table { width: 100%; border-collapse: collapse }
+#note { width: 100%; margin: 0 auto; font-size: 19px; line-height: 1.6; border-top: 3px double #aaa; padding-top: 6px; margin-top: 6px  }
 th { border-bottom: 3px double #aaa; padding-bottom: 6px !important }
 
 th, td { font-size: 19px; padding: 2px 3px }
