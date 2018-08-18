@@ -22,19 +22,24 @@ function loadData(res, colors) {
 
 	for (var key in res.feed.entry[0]) {
 		if (key.substring(0, 5) != 'gsx$_') continue;
-		if (res.feed.entry[0][key].$t == 'Color') colorKey = key;
+		if (res.feed.entry[0][key].$t == 'Codes' || res.feed.entry[0][key].$t == 'Color') colorKey = key;
 		if (key != colorKey) dateMap[key] = ymKey(res.feed.entry[0][key].$t);
 	}
 	
 	for (var i=1; i<res.feed.entry.length; i++) {
 		var sta = res.feed.entry[i].title.$t;
-		colors[sta] = res.feed.entry[i][colorKey].$t.replace(/\d+[A]?/g, '').split(',');
+		var codes = res.feed.entry[i][colorKey].$t;
+		colors[sta] = codes.replace(/\d+[A]?/g, '').split(',');
+		var tmp = codes.split(',');
+		for (var n in tmp) numberlings.push({'c': tmp[n], 's': sta});
+
 		counts[sta] = {};
 		for (var key in res.feed.entry[i]) {
 			if (! dateMap[key]) continue;
 			counts[sta][dateMap[key]] = res.feed.entry[i][key].$t * 1;
 		}
 	}
+	numberlings.sort(function(a, b) { return (a.c == b.c) ? 0 : (a.c < b.c ? -1 : 1); });
 	
 	return counts;
 }
@@ -201,9 +206,10 @@ function showMonthUI(ym) {
 
 function showStationUI(sta) {
 	var html = '<h1>台北捷運<select id="selSta">';
-	for (var s in counts) {
-		html += '<option value="' + s + '" class="c' + colors[s][0] + '" ' + (s == sta ? ' selected' : '') + '>';
-		html += s + '</option>';
+	for (var i in numberlings) {
+		var s = numberlings[i].s;
+		html += '<option value="' + s + '" class="c' + numberlings[i].c.replace(/\d+A?/, '') + '" ' + (s == sta ? ' selected' : '') + '>';
+		html += numberlings[i].c + ' ' + s + '</option>';
 	}
 	html += '</select>站進出旅運量日平均演進</h1>';
 	
@@ -284,11 +290,13 @@ var ranks;
 var rankIndex;
 var tops;
 var colors;
+var numberlings;
 
 function init() {
 	$.getJSON(jsonUrl, function(res) {
 		colors = {};
-		counts = loadData(res, colors);
+		numberlings = [];
+		counts = loadData(res, colors, numberlings);
 		months = fetchMonths(counts);
 		rankIndex = {};
 		ranks = countRank(counts, rankIndex);
