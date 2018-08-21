@@ -2,6 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<title>台北捷運各站進出旅運量日平均歷史軌跡</title>
 	<link rel="stylesheet" href="style.css">
 	<link href="https://fonts.googleapis.com/css?family=Signika+Negative" rel="stylesheet">
 </head>
@@ -11,6 +12,13 @@
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" encoding="utf-8"></script>
+<script>
+var system = '台北捷運';
+var xSta = '台北車站';
+var jsonUrl = 'https://spreadsheets.google.com/feeds/list/1e4gNpYWM_r_6CurWEBmvbMVLxitvZh_CZbC4nUhkc2Q/od6/public/values?alt=json';
+var Color = { BL: '#0072C6', BR: '#AA753F', O: '#FCA311', G: '#007C59', R: '#D12D33', Y: '#F7DB17' };
+var source = '台北捷運公司 <a href="https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136" target="_blank">https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136</a>';
+</script>
 <script src="./lib.js" encoding="utf-8"></script>
 
 </html>

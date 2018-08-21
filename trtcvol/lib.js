@@ -1,6 +1,5 @@
-var jsonUrl = 'https://spreadsheets.google.com/feeds/list/1e4gNpYWM_r_6CurWEBmvbMVLxitvZh_CZbC4nUhkc2Q/od6/public/values?alt=json';
-
-var Color = { BL: '#0072C6', BR: '#AA753F', O: '#FCA311', G: '#007C59', R: '#D12D33', Y: '#F7DB17' };
+//var jsonUrl = 'https://spreadsheets.google.com/feeds/list/1e4gNpYWM_r_6CurWEBmvbMVLxitvZh_CZbC4nUhkc2Q/od6/public/values?alt=json';
+//var Color = { BL: '#0072C6', BR: '#AA753F', O: '#FCA311', G: '#007C59', R: '#D12D33', Y: '#F7DB17' };
 
 Date.prototype.toKey = function() { return this.getFullYear() + '' + (this.getMonth() < 9 ? '0' : '') + (this.getMonth()+1); };
 function ymKey(dstr) { return new Date(dstr).toKey(); }
@@ -46,7 +45,7 @@ function loadData(res, colors) {
 
 function fetchMonths(counts) {
 	var months = [];
-	for (var ym in counts['淡水']) {
+	for (var ym in counts[xSta]) {
 		months.push(ym);
 	}
 	months.sort();
@@ -56,7 +55,7 @@ function fetchMonths(counts) {
 function countRank(counts, rankIndex) {
 	var ranks = { 'max': {} };
 	
-	for (var ym in counts['淡水']) {
+	for (var ym in counts[xSta]) {
 		var tmp = [];
 		for (var sta in counts) {
 			tmp.push({'s': sta, 'c': counts[sta][ym] || 0});
@@ -97,6 +96,22 @@ function countTops(counts) {
 	return tops;
 }
 
+function countRatios(counts) {
+	var ratios = {};
+	for (var i in months) {
+		var ym = months[i];
+		var total = 0;
+		for (var sta in counts) {
+			if (counts[sta][ym]) total += counts[sta][ym];
+		}
+		for (var sta in counts) {
+			if (!ratios[sta]) ratios[sta] = {};
+			ratios[sta][ym] = counts[sta][ym] * 2 / total;
+		}
+	}
+	return ratios;
+}
+
 function showMonthUI(ym) {
 	var lmym = lastMonthKey(ym);
 	var lyym = lastYearKey(ym);
@@ -114,7 +129,7 @@ function showMonthUI(ym) {
 		if (i*1 >= tmp.length - 10 && tmp[i].v < 0) ydiff[tmp[i].s].rank = -(tmp.length-i*1);
 	}
 	
-	var html = '<h1>台北捷運<select id="selYM">';
+	var html = '<h1>' + system + '<select id="selYM">';
 	for (var i in months) {
 		html += '<option value="' + months[i] + '"' + (months[i] == ym ? ' selected' : '') + '>';
 		html += toText(months[i]) + '</option>';
@@ -123,7 +138,7 @@ function showMonthUI(ym) {
 	
 	html += '<table>';
 	html += '<tr><th colspan="2">名次</th><th>車站</th>';
-	html += '<th colspan="2">' + toText(ym) + '<br>日均進出人次</th>';
+	html += '<th colspan="2">' + toText(ym) + '<br>日均進出人次</th><th>旅客比</th>';
 	html += '<th>' + toText(lmym) + '<br>日均進出人次</th><th>較上月增減</th>';
 	html += '<th>' + toText(lyym) + '<br>日均進出人次</th><th>較去年<br>同月增減</th><th>&nbsp;</th></tr>';
 	
@@ -164,6 +179,7 @@ function showMonthUI(ym) {
 		}
 		html += '</td>';
 		// ①②③④⑤⑥⑦⑧⑨⑩
+		html += '<td class="p">' + (ratios[sta][ym]*100.0).cut() + '%</td>';
 		
 		if (counts[sta][lmym]) {
 			html += '<td class="c">' + counts[sta][lmym].toLocaleString() + '</td>';
@@ -193,9 +209,11 @@ function showMonthUI(ym) {
 	html += '</table>';
 	
 	html += '<ol id="note">';
-	html += '<li>資料來源：台北捷運公司 <a href="https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136" target="_blank">https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136</a><br>';
+	html += '<li>資料來源：' + source + '<br>';
   	html += '計算方式：（入站+出站）/營運日數';
+	html += '<li>歷史資料來源：<a href="https://www.ptt.cc/bbs/MRT/index.html" target="_blank">批踢踢實業坊(ptt.cc) MRT板</a>精華區<br>';
 	html += '<li>若本月運量為通車以來最高，則以「*」註記。';
+	html += '<li>旅客比：在此站進出的旅客比例。計算方式： (日均進出人次/當月全站進出人次總和) × 2';
 	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">③</span>高與前<span class="dn">③</span>低的月份。';
 	html += '<li><span class="rd">&nbsp;&nbsp;&nbsp;</span>色塊內「<span class="up">↑</span>」及「<span class="dn">↓</span>」分別表示該車站名次比上月上升及下降（數字為排名數）；';
 	html += '「<span class="up">▲</span>」及「<span class="dn">▼</span>」分別表示運量比去年同期成長及衰退最多之車站（數字為依成長或衰退百分比排名之名次）。';
@@ -205,7 +223,7 @@ function showMonthUI(ym) {
 }
 
 function showStationUI(sta) {
-	var html = '<h1>台北捷運<select id="selSta">';
+	var html = '<h1>' + system + '<select id="selSta">';
 	for (var i in numberlings) {
 		var s = numberlings[i].s;
 		html += '<option value="' + s + '" class="c' + numberlings[i].c.replace(/\d+A?/, '') + '" ' + (s == sta ? ' selected' : '') + '>';
@@ -215,7 +233,7 @@ function showStationUI(sta) {
 	
 	html += '<table>';
 	html += '<tr><th>順位</th><th>月份</th>';
-	html += '<th colspan="2">日均進出人次</th><th>所有站中排名</th>';
+	html += '<th colspan="2">日均進出人次</th><th>全站排名</th><th>旅客比</th>';
 	html += '<th>較上月增減</th><th class="h">&nbsp;</th></tr>';
 
 	var min = 999999999, max = 0;
@@ -244,6 +262,8 @@ function showStationUI(sta) {
 		if (counts[sta][ym] > maxVal) maxVal = counts[sta][ym];
 		html += '<td class="r">' + ranks[sta][ym] + '/' + ranks['max'][ym] + '</td>';
 		
+		html += '<td class="p">' + (ratios[sta][ym]*100.0).cut() + '%</td>';
+		
 		if (lmym && counts[sta][lmym]) {
 			html += '<td class="p">' + ((counts[sta][ym] - counts[sta][lmym])*100.0 / counts[sta][lmym]).cut() + '%</td>';
 		} else {
@@ -259,10 +279,12 @@ function showStationUI(sta) {
 	html += '</table>';
 	
 	html += '<ol id="note">';
-	html += '<li>資料來源：台北捷運公司 <a href="https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136" target="_blank">https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136</a><br>';
+	html += '<li>資料來源：' + source + '<br>';
   	html += '計算方式：（入站+出站）/營運日數';
+	html += '<li>歷史資料來源：<a href="https://www.ptt.cc/bbs/MRT/index.html" target="_blank">批踢踢實業坊(ptt.cc) MRT板</a>精華區<br>';
 	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">⑩</span>高與前<span class="dn">⑤</span>低的月份。';
 	html += '<li>若本月運量為通車以來最高，則以「*」註記。';
+	html += '<li>旅客比：在此站進出的旅客比例。計算方式： (日均進出人次/當月全站進出人次總和) × 2';
 	html += '</ol>';
 	
 	$('#main').html(html);
@@ -270,7 +292,7 @@ function showStationUI(sta) {
 
 function setUI() {
 	var val = decodeURIComponent((window.location.hash + '').replace(/^#/, ''));
-	if (val.match(/^201\d{3}$/)) {
+	if (val.match(/^20[01]\d{3}$/)) {
 		showMonthUI(val);
 	} else if (counts[val]) {
 		showStationUI(val);
@@ -291,6 +313,7 @@ var rankIndex;
 var tops;
 var colors;
 var numberlings;
+var ratios;
 
 function init() {
 	$.getJSON(jsonUrl, function(res) {
@@ -301,6 +324,7 @@ function init() {
 		rankIndex = {};
 		ranks = countRank(counts, rankIndex);
 		tops = countTops(counts);
+		ratios = countRatios(counts);
 		setUI();
 	});
 }
