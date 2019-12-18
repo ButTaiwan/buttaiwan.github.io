@@ -1,0 +1,526 @@
+<!html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>2020年不分區立委得票與當選名單模擬器</title>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+	<style>
+		/* 41fac3 f7967c fac19b */
+		
+	
+		body { background-color: #222; color: #eee; font-family: 'Titillium Web', '微軟正黑體', sans-serif; margin: 0 }
+
+		a:link, a:visited, a:hover, a:active { color: #f7e07c }
+		input, select { background-color: #111; color: #fac19b; border: 1px solid #ccc; padding: 1px 3px }
+	
+		h1 { background-color: #fac19b; color: #000; font-size: 32px; margin: 0 0 20px 0; padding: 4px 10px }
+	
+		table { border-collapse: collapse; margin: 0 10px }
+		tr.even { background-color: #111 }
+		tr:hover { background-color: #333 }
+		th { white-space: nowrap }
+		td { padding: 0; margin: 0 }
+	
+		.party .name { font-weight: bold; display: inline-block; width: 9em; text-align: right; padding: 0 10px }
+		.party .name em { font-style: normal; font-weight: bold; font-family: Meiryo; font-size: 140%; margin-left: 2px; color: #fac19b; vertical-align: middle; line-height: 1.1 }
+
+		.rate { display: inline-block; width: 3.5em; text-align: right; font-weight: normal; font-family: 'Titillium Web', sans-serif; line-height: 1.1 }
+		input.rate { border: 1px solid #ccc; font-size: 1em }
+		.rp { display: inline-block; color: #fac19b; font-weight: normal }
+		.num { display: inline-block; width: 5em; color: #fac19b; text-align: right; font-weight: normal }
+
+		.pd { white-space: nowrap; text-align: center }
+		.pd .pass { display: inline-block; width: 4em; font-weight: bold; color: #fac19b; text-align: center }
+		.pd .respan:before { content: '→' }
+		.pd .slider { display: none; width: 120px }
+		
+		.cands { }
+		.cands .c { display: block; float: left; background-color: #000; padding: 1px 3px; font-size: 14px; margin: 1px 2px; color: #aaa; line-height: 1.3; cursor: default }
+		.cands sup { line-height: 1; vertical-align: top; padding-right: 1px }
+		.cands .M { border: 1px solid #0881cc; color: #0881cc }
+		.cands .F { border: 1px solid #bd1c3f; color: #bd1c3f }
+		.cands .p { background: #fac19b; /* color: #000 */ }
+		
+		.box { font-size: 0.9em; margin: 10px 5px; border: 1px solid #777; background-color: #000; padding: 5px }
+		.box span { display: inline-block; margin: 0 10px }
+		.box input { display: inline-block; vertical-align: middle; margin: 0 4px; font-family: 'Titillium Web', sans-serif; }
+		.box select { font-size: 15px }
+		
+		.side { float: right; width: 250px; height: 480px; overflow: auto; margin: 0 10px; background-color: #111 }
+		.side h3 { margin: 0; color: #fac19b }
+		.side ul { padding: 0; margin: 0.2em 0 1em 0 }
+		.side li { list-style: none; cursor: pointer; color: #eee }
+		.side li:hover { color: #fac19b }
+		.side .np { font-weight: bold; background-color: #444 }
+		
+		h2 { color: #fac19b; font-size: 20px; margin: 8px 0 4px 0; padding: 4px 10px; clear: both; border-top: 1px solid #666 }
+		.qa ul { width: 46%; float: left; margin: 0 }
+		.qa p { line-height: 1.6; color: #ccc }
+		.qa p b { color: #fff }
+		.qa .q { color: #fac19b; font-weight: bold; }
+		.qa .q img { vertical-align: -50%; margin: 2px; border: 1px solid #999 }
+	</style>
+</head>
+<body>
+
+<h1>2020年不分區立委得票與當選名單模擬器 Ver 1.00</h1>
+
+<div class="box" id="settings">
+<span><button id="clear">全部清除</button></span>
+<span><input id="chk_qmode" type="checkbox">未選好選滿100%時，將剩餘比例<em id="leftratio"></em>視為未達門檻票</span>
+<span>投票人數基於投票率<input id="vote_ratio" size="3" value="68.9" style="text-align:center">%計算</span>
+<span><a href="https://www.facebook.com/ButPublicZone/posts/2625457134211777" target="_blank">錯誤回報或功能建議由此進</a></span>
+</div>
+
+<div id="main">
+
+<div class="box side" id="polls">
+<div id="pollsel"></div>
+</div>
+
+<table id="paties"></table>
+</div>
+
+</div>
+
+<h2>免責事項</h2>
+<div class="qa">
+<ul>
+	<li>
+		<p class="q">關於政黨號次與名單之正確性</p>
+		<p class="a">此模擬器之政黨號次與名單蒐集自新聞與各政黨申報資料。
+			中選會預計2019/12/31才會正式公布不分區立委名單，若正式名單公布時有所變更，請以中選會公布為準。</p>
+	</li>
+	<li>
+		<p class="q">關於計算模擬結果的正確性</p>
+		<p class="a">本模擬器開發時已盡可能確認法規正確性、餘數分配方式等細節。
+			然若公布之當選結果與中選會公布不同，請以中選會公告為準。</p>
+	</li>
+</ul>
+<ul>
+	<li>
+		<p class="q">關於選罷法53條規定投票日前10天起不得發布任何民調之規定</p>
+		<p class="a">此模擬器並非民調資訊，而是供自由輸入得票率而模擬計算當選名單之用。<br>
+			例如，雖然看到政黨公布的不分區名單與順序，但實際上到底需要得到多少選票，自己所心儀的候選人才會當選呢？
+			因不分區立委實際還有5%票數門檻、婦女保障名額等各種眉眉角角需要考慮，此工具可作為輔助估算之用。<br>
+			系統裡所提供之參考民調資料均蒐集自<a href="https://zh.wikipedia.org/wiki/2020%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E7%AB%8B%E6%B3%95%E5%A7%94%E5%93%A1%E9%81%B8%E8%88%89#%E5%85%A8%E5%9C%8B%E4%B8%8D%E5%88%86%E5%8D%80%E5%8F%8A%E5%83%91%E5%B1%85%E5%9C%8B%E5%A4%96%E5%9C%8B%E6%B0%91%E9%81%B8%E8%88%89_3" target="_blank">Wikipedia</a>，
+			由各媒體民調單位之前發布之民調結果，並非投票日前10日之後的民調資料，在此敘明。<br>
+			直到選前10日止，本頁會不定期更新最新民調結果。</p>
+	</li>
+</ul>
+
+<div class="qa">
+<h2>常見問題</h2>
+<ul>
+	<li>
+		<p class="q">不分區立委應選幾人？</p>
+		<p class="a">根據憲法增修條文第4條「<b>三、全國不分區及僑居國外國民共三十四人。</b>」之規定，
+			不分區立委共應選34人，政黨平均每得票3%可當選1席委員。然應注意最低當選門檻等規定，請參照下題。</p>
+	</li>
+	<li>
+		<p class="q">平均為什麼我將某政黨得票調到大於3%了，當選名單卻一席都沒有？ <img src="qa1.png"></p>
+		<p class="a">根據憲法增修條文第4條「<b>第三款依政黨名單投票選舉之，由獲得百分之五以上政黨選舉票之政黨依得票比率選出之</b>」
+			與選罷法「<b>全國不分區及僑居國外國民立法委員選舉當選名額之分配，依下列規定：</b>…(中略)…<b>五、各該政黨之得票比率未達百分之五以上者，不予分配當選名額；其得票數不列入第一款計算。</b>」之規定，
+			政黨得票必須達到5%門檻，才能分配當選名單。未達5%之政黨選票，將平均分配到超過5%之其他政黨計算。</p>
+	</li>
+	<li>
+		<p class="q">政黨得票超過其提名人數時會怎麼處理？ <img src="qa3.png"></p>
+		<p class="a">根據選罷法「<b>全國不分區及僑居國外國民立法委員選舉當選名額之分配，依下列規定：</b>…(中略)…<b>四、政黨登記之候選人名單人數少於應分配之當選名額時，視同缺額。</b>」之規定，
+			人數不足時則缺額，此缺額不會分配至其他政黨，故不分區立委總當選人數會少於34人。</p>
+	</li>
+</ul>
+<ul>
+	<li>
+		<p class="q">為什麼有時候會有未按照順序跳著當選的情況，是不是系統bug？ <img src="qa2.png"></p>
+		<p class="a">根據憲法增修條文第4條「<b>第三款依政黨名單投票選舉之，</b>…(中略)…<b>各政黨當選名單中，婦女不得低於二分之一。</b>」
+			與選罷法「<b>全國不分區及僑居國外國民立法委員選舉當選名額之分配，依下列規定：</b>…(中略)…<b>前項各政黨當選之名額，婦女不得低於二分之一。</b>」之規定，
+			各政黨之當選名單中，女性當選人必須等於或多於男性當選人。</p>
+	</li>
+	<li>
+		<p class="q">為什麼既然有婦女保障名額規定，很多政黨卻提出順序矛盾的名單，造成當選順序亂跳？</p>
+		<p class="a">這個問題應該去問那些政黨……。<br>
+			不過，未來4年內，當有不分區立委失去立委資格（死亡、判刑、失去黨籍、辭職、當選縣市長…）而須遞補當選時，同樣依照此名單順序並考慮婦女保障名額推算遞補當選者。
+			若失去立委資格的是男性立委，則跳過的第一順位男性候選人則會遞補當選。故名單順序還是會影響日後的遞補當選順序，不是完全沒意義。</p>
+	</li>
+	<li>
+		<p class="q">政黨可當選人數明明還有剩，為什麼硬是空著不分配？ <img src="qa4.png"></p>
+		<p class="a">根據選罷法「<b>全國不分區及僑居國外國民立法委員選舉當選名額之分配，依下列規定：</b>…(中略)…<b>婦女候選人少於應分配之婦女當選名額時，視同缺額。</b>」之規定，
+			當政黨提出之不分區立委名單，男性高於女性人數時，多出的人數無法當選，形同缺額。（但未來該黨若有不分區男性立委辭職或失去黨籍，則名單剩餘人員可遞補。）</p>
+	</li>
+</ul>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+</body>
+<script>
+var full = 34;					// 不分區總席次
+var voterTotal = 19340076;		// 此屆總投票權人
+
+var data = {
+	'1':	'合一行動聯盟',
+	'2':	'中華統一促進黨',
+	'3':	'親民黨',
+	'4':	'安定力量',
+	'5':	'台灣基進',
+	'6':	'時代力量',
+	'7':	'新黨',
+	'8':	'喜樂島聯盟',
+	'9':	'中國國民黨',
+	'10':	'一邊一國行動黨',
+	'11':	'勞動黨',
+	'12':	'綠黨',
+	'13':	'宗教聯盟',
+	'14':	'民主進步黨',
+	'15':	'台灣民眾黨',
+	'16':	'台灣維新',
+	'17':	'台澎黨',
+	'18':	'國會政黨聯盟',
+	'19':	'台灣團結聯盟'
+};
+
+var raw = {
+	'民主進步黨': [
+		'F吳玉琴', 'M洪申翰', 'F范雲', 'F羅美玲', 'M邱泰源', 'F周春米', 'M游錫堃', 'M柯建銘', 'F管碧玲', 'M莊瑞雄',
+		'M沈發惠', 'F林楚茵', 'M施義芳', 'M游萬豐', 'M歐蜜·偉浪', 'F湯蕙禎', 'F陳靜敏', 'M黃奕睿', 'M許忠富', 'F張菊芳',
+		'M呂建德', 'F陳培瑜', 'F顏聖冠', 'F李淑芬', 'M柯富揚', 'M黃金舜', 'F林愛龍', 'M董建宏', 'F林世嘉', 'M黃帝穎',
+		'F趙心瑜', 'F蔣念祖', 'F楊懿珊'],
+	'中國國民黨': [
+		'M曾銘宗', 'F葉毓蘭', 'F李貴敏', 'M吳斯懷', 'F鄭麗文', 'M林文瑞', 'F廖婉汝', 'M翁重鈞', 'F吳怡玎', 'M陳以信',
+		'F張育美', 'M李德維', 'F溫玉霞', 'M吳敦義', 'M謝龍介', 'F車宜靜', 'F牛春茹', 'M曾文培', 'F李玉嬋', 'M王裕文',
+		'F王桂芸', 'M耿繼文', 'F侯佳齡', 'M謝瀛華', 'F邱素蘭', 'M張智倫', 'F李惠蘭', 'M連元章', 'F許謹如', 'M林有志',
+		'F黃璉華'],
+	'台灣民眾黨': [
+		'F賴香伶', 'M張其祿', 'F高虹安', 'M邱臣遠', 'F蔡壁如', 'M楊博宇', 'F吳欣盈', 'M詹翔欽', 'F陳琬惠', 'M林國成',
+		'F孫智麗', 'M楊弘仁', 'F黃瀞瑩', 'M馮啟彥', 'F江惠儀', 'M羅義興', 'F陳思宇', 'M魏安國', 'F李思慧', 'M傅郁揚',
+		'F何容君', 'M端木正', 'F陳安芃', 'M何松穎', 'F吳靜怡', 'M李家齊', 'F周芳如', 'M張學瀚'],
+	'時代力量': [
+		'F陳椒華', 'M邱顯智', 'F王婉諭', 'M黃國昌', 'M翟本喬', 'F關心羚', 'F王幗英', 'F吳佩芸', 'F白卿芬', 'F趙芸菁',
+		'M詹智鈞'],
+	'親民黨': [
+		'F滕西華', 'M李鴻鈞', 'M宣明智', 'F劉宥彤', 'F陳怡潔', 'M張碩文', 'M施壽全', 'M李海同', 'F蔡沁瑜', 'M高瀚',
+		'M游文人', 'F陳秀玲', 'M黃文卿', 'M李本玠', 'F黎淑慧', 'F彭瓊芳', 'M劉宗夏', 'F林昊宜', 'F趙偉伶', 'F蕭涵方',
+		'M陳一夫', 'F吳方宜'],
+	'新黨': [
+		'M邱毅', 'F陳麗玲', 'F沈采穎', 'M王炳忠', 'F賀樺', 'M林明正', 'F黃乃芸', 'M龐文楚', 'F郝永瑞', 'M楊世光'],
+	'綠黨': [
+		'F鄧惠文', 'M高成炎', 'M王浩宇', 'F李菁琪', 'M張佑輔', 'F張竹芩'],
+	'台灣團結聯盟': [
+		'M潘建志', 'F周倪安', 'M劉一德', 'F蔡以新', 'M潘厚勳', 'F歐陽瑞蓮', 'M高基讚'],
+	'台灣基進': [
+		'F成令方', 'M陳奕齊', 'F吳欣岱', 'M陳冠榮', 'M何澄輝', 'F李雨蓁'],
+	'台澎黨': [
+		'M鄭自才', 'M黃聖峰', 'M楊神龍', 'F林碧如'],
+	'國會政黨聯盟': [
+		'F徐欣瑩', 'M張宗傑', 'F王靜亞', 'M陳漢洲', 'F李宗芹', 'M余艇'],
+	'台灣維新': [
+		'F賀德芬', 'F萬淑娟', 'M曾吉郎', 'F蔡惠蘭', 'M詹昭能', 'M蘇煥智'],
+	'中華統一促進黨': [
+		'F謝啟大', 'M丁炳仁', 'F何建華', 'M馬銀海', 'M李承龍', 'F張瑜庭', 'M張安樂'],
+	'勞動黨': [
+		'M羅美文', 'F王娟萍'],
+	'安定力量': [
+		'M朱竹元', 'F陳曉虹', 'M毛嘉慶', 'F馮瑞珠', 'M裘佩恩', 'F林秋屏', 'M吳蕚洋', 'F李允佳', 'M洪正一', 'F蘇美玲'],
+	'喜樂島聯盟': [
+		'F林秀霞', 'M施正鋒', 'M高大成', 'F李素貞', 'F張君瑜', 'M林東徵'],
+	'一邊一國行動黨': [
+		'F陳昭姿', 'M鄭新助', 'F朱孟庠', 'M楊其文', 'F張文翊'],
+	'宗教聯盟': [
+		'M朱武獻', 'F翁瑋鍼', 'F呂玲玲', 'M閔代璽', 'M呂錫勲', 'F袁慧心', 'F吳亮儀', 'M陳建平'],
+	'合一行動聯盟': [
+		'M彭迦智', 'F龍傅若瑋', 'F郝淑薏', 'M廖金河', 'F孫成玉', 'M張宜興', 'F周美雲', 'M林傑忠']
+};
+
+var pindex = {};
+
+var results = {
+	'2016立委選舉結果': {'民主進步黨': 44.0598, '親民黨': 6.5203, '自由台灣黨': 0.3937, '和平鴿聯盟黨': 0.2512, '軍公教聯盟黨': 0.7154, '民國黨': 1.6212, '信心希望聯盟': 1.6951, '中華統一促進黨': 0.4622, '中國國民黨': 26.9148, '台灣團結聯盟': 2.5076, '時代力量': 6.1059,
+						'大愛憲改聯盟': 0.1267, '綠黨社會民主黨聯盟': 2.5275, '台灣獨立黨': 0.2256, '無黨團結聯盟': 0.6372, '新黨': 4.1843, '健保免費連線': 0.4186, '樹黨': 0.6331,
+						'備註': '綠黨數值借用綠社盟得票率，國會政黨聯盟數值借用民國黨得票率。'},
+	'2012立委選舉結果': {'台灣國民會議': 0.9013, '人民最大黨': 0.2271, '民主進步黨': 34.6178, '台灣團結聯盟': 8.956, '中國國民黨': 44.5468,
+						'新黨': 1.4888, '健保免費連線': 1.2410, '綠黨': 1.7441, '親民黨': 5.4861, '中華民國臺灣基本法連線': 0.1464, '台灣主義黨': 0.2271},
+	'2008立委選舉結果': {'公民黨': 0.5, '制憲聯盟': 0.3, '台灣團結聯盟': 3.5, '第三社會黨': 0.5, '民主進步黨': 36.9, '新黨': 4.0,
+						'綠黨': 0.6, '台灣農民黨': 0.6, '無黨團結聯盟': 0.7, '中國國民黨': 51.2, '紅黨': 0.8, '客家黨': 0.4},
+};
+
+var polls = {
+	'08/05－08/06 綠黨': {'中國國民黨': 36.6, '民主進步黨': 24.9, '台灣民眾黨': 12.5, '時代力量': 8.0, '親民黨': 1.8, '綠黨': 2.1, '台灣基進': 2.2},
+	'08/22－08/26 ETtoday新聞雲': {'中國國民黨': 33.0, '民主進步黨': 26.4, '台灣民眾黨': 24.0, '時代力量': 4.4, '親民黨': 1.7, '新黨': 1.2, '台灣團結聯盟': 1.0},
+	'09/02－09/03 綠黨': {'中國國民黨': 38.3, '民主進步黨': 24.7, '台灣民眾黨': 9.9, '時代力量': 6.3, '親民黨': 1.5, '綠黨': 2.0, '台灣基進': 2.9},
+	'09/09－09/10 ETtoday新聞雲': {'中國國民黨': 35.6, '民主進步黨': 27.6, '台灣民眾黨': 20.4, '時代力量': 4.4, '親民黨': 1.7, '新黨': 0.9, '台灣團結聯盟': 0.2},
+	'09/17－09/17 綠黨': {'中國國民黨': 33.1, '民主進步黨': 25.1, '台灣民眾黨': 8.6, '時代力量': 8.4, '親民黨': 1.7, '綠黨': 2.1, '台灣基進': 3.1},
+	'09/23－09/24 綠黨': {'中國國民黨': 37.5, '民主進步黨': 27.1, '台灣民眾黨': 9.4, '時代力量': 6.9, '親民黨': 0.7, '綠黨': 1.9, '台灣基進': 1.4},
+	'09/25－09/29 ETtoday新聞雲': {'中國國民黨': 34.8, '民主進步黨': 31.0, '台灣民眾黨': 19.9, '時代力量': 5.0, '親民黨': 1.7, '新黨': 1.4, '台灣團結聯盟': 0.4},
+	'10/01－10/01 綠黨': {'中國國民黨': 34.5, '民主進步黨': 25.1, '台灣民眾黨': 12.1, '時代力量': 8.1, '親民黨': 2.2, '綠黨': 1.8, '台灣基進': 1.2},
+	'10/07－10/08 綠黨': {'中國國民黨': 38.3, '民主進步黨': 31.6, '台灣民眾黨': 8.3, '時代力量': 6.5, '親民黨': 0.9, '綠黨': 2.0, '台灣基進': 1.0},
+	'10/14－10/15 品觀點': {'中國國民黨': 27.2, '民主進步黨': 24.0, '台灣民眾黨': 5.7, '時代力量': 2.9, '親民黨': 1.0},
+	'10/14－10/15 匯流新聞網': {'中國國民黨': 29.2, '民主進步黨': 27.2, '台灣民眾黨': 9.6, '時代力量': 5.3, '親民黨': 1.6, '新黨': 0.8, '綠黨': 1.3, '台灣團結聯盟': 0.7, '台灣基進': 0.7, '一邊一國行動黨': 0.7, '喜樂島連盟': 0.2, '國會政黨聯盟': 0.1},
+	'10/21－10/22 品觀點': {'中國國民黨': 27.7, '民主進步黨': 23.0, '台灣民眾黨': 6.9, '時代力量': 2.9, '親民黨': 1.2},
+	'10/18－10/23 TVBS': {'中國國民黨': 37, '民主進步黨': 25, '台灣民眾黨': 12, '時代力量': 8, '親民黨': 2, '新黨': 0.8, '綠黨': 0.8, '台灣團結聯盟': 0.2},
+	'10/24－10/25 美麗島電子報': {'中國國民黨': 28.2, '民主進步黨': 29.8, '台灣民眾黨': 7.7, '時代力量': 3.1, '親民黨': 0.8, '新黨': 0.6, '台灣基進': 0.9},
+	'10/22－10/27 ETtoday新聞雲': {'中國國民黨': 36.2, '民主進步黨': 31.4, '台灣民眾黨': 20.5, '時代力量': 5.0, '親民黨': 1.2, '新黨': 0.5, '綠黨': 0.9},
+	'10/28－10/29 品觀點': {'中國國民黨': 27.6, '民主進步黨': 25.3, '台灣民眾黨': 5.7, '時代力量': 3.7, '親民黨': 1.1},
+	'11/04－11/05 品觀點': {'中國國民黨': 27.7, '民主進步黨': 23.1, '台灣民眾黨': 6.5, '時代力量': 2.8, '親民黨': 1.9},
+	'11/04－11/05 旺旺中時集團': {'中國國民黨': 29.7, '民主進步黨': 24.2, '台灣民眾黨': 4.7, '時代力量': 4.5, '親民黨': 1.2},
+	'11/01－11/07 ETtoday新聞雲': {'中國國民黨': 33.2, '民主進步黨': 31.7, '台灣民眾黨': 14.3, '時代力量': 8.0, '親民黨': 3.2, '新黨': 1.2, '綠黨': 1.4},
+	'11/04－11/07 TVBS': {'中國國民黨': 37, '民主進步黨': 25, '台灣民眾黨': 10, '時代力量': 7, '親民黨': 2, '新黨': 0.9, '綠黨': 0.3, '台灣團結聯盟': 0.8},
+	'11/11－11/12 品觀點': {'中國國民黨': 24.6, '民主進步黨': 23.5, '台灣民眾黨': 6.9, '時代力量': 3.1, '親民黨': 1.6},
+	'11/13－11/14 旺旺中時集團': {'中國國民黨': 25.2, '民主進步黨': 22.0, '台灣民眾黨': 7.5, '時代力量': 5.9, '親民黨': 2.3},
+	'11/13－11/15 TVBS': {'中國國民黨': 33, '民主進步黨': 23, '台灣民眾黨': 12, '時代力量': 6, '親民黨': 4, '新黨': 0.6, '綠黨': 0.5, '台灣團結聯盟': 0.2},
+	'11/14－11/16 聯合報系': {'中國國民黨': 29, '民主進步黨': 29, '台灣民眾黨': 8, '時代力量': 3, '親民黨': 4, '新黨': 1, '綠黨': 1},
+	'11/15－11/17 蘋果日報': {'中國國民黨': 25.2, '民主進步黨': 26.5, '台灣民眾黨': 10.1, '時代力量': 7.5, '親民黨': 2.9},
+	'11/15－11/17 品觀點': {'中國國民黨': 22.7, '民主進步黨': 27.0, '台灣民眾黨': 7.4, '時代力量': 3.6, '親民黨': 2.6},
+	'11/18－11/20 寶島通訊社': {'中國國民黨': 32.06, '民主進步黨': 38.25, '台灣民眾黨': 12.60, '時代力量': 4.72, '親民黨': 4.78, '新黨': 1.57, '綠黨': 2.08, '台灣基進': 2.92},
+	'11/19－11/20 綠黨': {'中國國民黨': 28.2, '民主進步黨': 28.4, '台灣民眾黨': 11.1, '時代力量': 4.1, '親民黨': 3.6, '新黨': 1.2, '綠黨': 1.6, '台灣基進': 0.9},
+	'11/20－11/21 台獨聯盟': {'中國國民黨': 27.2, '民主進步黨': 24.3, '台灣民眾黨': 10.6, '時代力量': 4.5, '親民黨': 4.1, '綠黨': 1.2, '台灣基進': 2.9},
+	'11/22－11/24 蘋果日報': {'中國國民黨': 24.2, '民主進步黨': 31.2, '台灣民眾黨': 10.0, '時代力量': 5.0, '親民黨': 3.5},
+	'11/23－11/24 兩岸政策協會': {'中國國民黨': 25.9, '民主進步黨': 34.7, '台灣民眾黨': 6.0, '時代力量': 2.7, '親民黨': 4.2, '新黨': 1.4, '綠黨': 1.1, '台灣團結聯盟': 0.1, '台灣基進': 1.3},
+	'11/21－11/25 ETtoday新聞雲': {'中國國民黨': 27.9, '民主進步黨': 32.3, '台灣民眾黨': 10.4, '時代力量': 4.8, '親民黨': 4.7, '新黨': 1.3, '綠黨': 1.3},
+	'11/24－11/25 震撼世代傳媒': {'中國國民黨': 27.3, '民主進步黨': 30.7, '台灣民眾黨': 9.0, '時代力量': 3.0, '親民黨': 4.1},
+	'11/25－11/26 品觀點': {'中國國民黨': 22.9, '民主進步黨': 23.6, '台灣民眾黨': 7.6, '時代力量': 3.7, '親民黨': 2.8, '新黨': 0.9, '綠黨': 1.4, '台灣團結聯盟': 0.2, '台灣基進': 1.4, '一邊一國行動黨': 0.9, '安定力量': 0.2, '喜樂島連盟': 0.1, '中華統一促進黨': 0.1, '台灣維新': 0.1, '台澎黨': 0.1, '合一行動聯盟': 0.1, '宗教聯盟': 0.1},
+	'11/25－11/26 美麗島電子報': {'中國國民黨': 25.1, '民主進步黨': 34.1, '台灣民眾黨': 9.5, '時代力量': 5.3, '親民黨': 2.5, '新黨': 0.6, '綠黨': 2.0, '台灣團結聯盟': 0.4, '台灣基進': 1.7, '一邊一國行動黨': 0.6, '安定力量': 0.2, '國會政黨聯盟': 0.1, '宗教聯盟': 0.1},
+	'11/26－11/26 綠黨': {'中國國民黨': 27.9, '民主進步黨': 33.9, '台灣民眾黨': 9.8, '時代力量': 6.5, '親民黨': 4.3, '綠黨': 2.2, '台灣基進': 1.8},
+	'11/25－11/27 自由時報': {'中國國民黨': 17.23, '民主進步黨': 32.58, '台灣民眾黨': 7.77, '時代力量': 3.75, '親民黨': 0.94, '新黨': 0.09},
+	'11/27－11/28 放言': {'中國國民黨': 25.7, '民主進步黨': 28.3, '台灣民眾黨': 8.7, '時代力量': 5.7, '親民黨': 2.3, '綠黨': 2.5, '台灣基進': 1.6},
+	'11/27－11/28 台灣制憲基金會': {'中國國民黨': 19.8, '民主進步黨': 36.9, '台灣民眾黨': 10.6, '時代力量': 6.6, '親民黨': 4.2, '綠黨': 2.2},
+	'11/27－11/29 TVBS': {'中國國民黨': 31, '民主進步黨': 24, '台灣民眾黨': 12, '時代力量': 6, '親民黨': 3, '新黨': 2, '綠黨': 0.3, '台灣團結聯盟': 0.4, '台灣基進': 1},
+	'12/02－12/03 綠黨': {'中國國民黨': 22.7, '民主進步黨': 31.9, '台灣民眾黨': 11.5, '時代力量': 7.0, '親民黨': 2.9, '綠黨': 1.0, '台灣基進': 2.0},
+	'12/02－12/04 TVBS': {'中國國民黨': 29, '民主進步黨': 28, '台灣民眾黨': 11, '時代力量': 6, '親民黨': 4, '新黨': 2, '綠黨': 0.8, '台灣團結聯盟': 0.1, '台灣基進': 0.6},
+	'12/05－12/06 美麗島電子報': {'中國國民黨': 22.2, '民主進步黨': 37.8, '台灣民眾黨': 7.3, '時代力量': 5.9, '親民黨': 3.4, '新黨': 0.6, '綠黨': 1.7, '台灣團結聯盟': 0.2, '台灣基進': 1.4, '一邊一國行動黨': 0.6, '安定力量': 0.5, '喜樂島聯盟': 0.1, '國會政黨聯盟': 0.1, '台灣維新': 0.1, '宗教聯盟': 0.4},
+	'12/05－12/07 新台灣國策智庫': {'中國國民黨': 18.9, '民主進步黨': 30.6, '台灣民眾黨': 11.5, '時代力量': 7.0, '親民黨': 3.7, '新黨': 0.6, '綠黨': 2.4, '台灣團結聯盟': 0.1, '台灣基進': 0.6},
+	'12/05－12/07 聯合報系': {'中國國民黨': 24, '民主進步黨': 30, '台灣民眾黨': 8, '時代力量': 3, '親民黨': 3},
+	'12/04－12/08 ETtoday新聞雲': {'中國國民黨': 27.7, '民主進步黨': 28.8, '台灣民眾黨': 12.6, '時代力量': 6.9, '親民黨': 2.6, '新黨': 0.7, '綠黨': 1.4},
+	'12/09－12/11 自由時報': {'中國國民黨': 15.21, '民主進步黨': 35.07, '台灣民眾黨': 6.16, '時代力量': 3.92, '親民黨': 2.52, '新黨': 0.19, '台灣團結聯盟': 0.19},
+	'12/09－12/15 蘋果日報': {'中國國民黨': 19.6, '民主進步黨': 29.3, '台灣民眾黨': 9.9, '時代力量': 6.9, '親民黨': 3.0, '新黨': 0.5, '綠黨': 1.9, '台灣團結聯盟': 0.5, '台灣基進': 1.8}
+};
+
+var partyMap = {	// 處理政黨的改名、合併、聯盟或聯盟解除
+	'民國黨': '國會政黨聯盟',
+	'綠黨社會民主黨聯盟': '綠黨'
+};
+
+function nextChance(votes) { //, unit) {
+	var max = 0;
+	var maxI = null;
+	
+	for (var i in votes) {
+		if (votes[i].pass < data[i].list.length && votes[i].left > max) {
+			max = votes[i].left;
+			maxI = i;
+		}
+	}
+	
+	if (maxI != null) {
+		votes[maxI].pass += 1;
+		votes[maxI].left = 0; //Math.max(0, votes[maxI].left - unit);
+	}
+}
+
+function calculate(sender) {
+	var votes = {};
+	var rateTotal = 0;	// 原始比例總和
+	var rateSum = 0;	// 5%以上之總和
+	$('.slider').each(function() {
+		var rateVal = $(this).val()*1;
+		var id = $(this).data('no');
+		votes[id] = { rate: rateVal, pass: 0 };
+		$('#rate_' + id).val((Math.floor(rateVal*1000)/10));
+		var num = ($('#vote_ratio').val()*0.01 || 1) * voterTotal * rateVal;
+		$('#num_' + id).html(num == 0 ? '' : '≈ ' + Math.floor(num/10000) + '<small>萬票</small>');
+		rateTotal += rateVal;
+		if (rateVal >= 0.05) rateSum += rateVal;
+	});
+	if (sender != null && rateTotal > 1) {
+		var i = sender.data('no');
+		var maxRate = votes[i].rate-(rateTotal-1);
+		setTimeout(function() { sender.val(maxRate).change() }, 100);
+		return;
+	}
+
+	//if (rateSum <= 0) return;
+	$('#leftratio').text((Math.round((1 - rateTotal)*1000)/10) + '%');
+	if (!$('#chk_qmode').prop('checked') && rateTotal < 1) rateSum += (1-rateTotal);
+	
+	for (var i in votes) {
+		votes[i].rateX = (votes[i].rate >= 0.05) ? votes[i].rate / rateSum : 0;
+		$('#rateX_' + i).text((Math.round(votes[i].rateX*1000)/10) + '%');
+	}
+
+	//var unit = rateSum / full;		// 每個當然當選人所需%
+	var passed = full;
+	for (var i in votes) {
+		if (votes[i].rate < 0.05) {
+			votes[i].pass = 0;
+			votes[i].left = 0;
+		} else {
+			votes[i].pass = Math.floor(votes[i].rateX * full);
+			//votes[i].left = votes[i].rateX - unit * votes[i].pass;
+			votes[i].left = (votes[i].rateX * full) % 1;
+			passed -= votes[i].pass;
+		}
+	}
+	for (var n=0; n<passed; n++) nextChance(votes); //, unit);
+	
+	for (var i in votes) {
+		votes[i].passReal = Math.min(votes[i].pass, data[i].order.length);
+	}
+	
+	for (var i in votes) {
+		$('#pass_' + i).text(votes[i].pass + (votes[i].pass != votes[i].passReal ? '→'+votes[i].passReal : ''));
+	
+		var clist = $('#cands_' + i).find('.c');
+		clist.removeClass('p');
+		
+		for (var n=0; n < votes[i].passReal; n++) {
+			$(clist[data[i].order[n]-1]).addClass('p');
+		}
+	}
+}
+
+function clearAll(qmode) {
+	$('#chk_qmode').prop('checked', qmode);
+	for (var i in data) {
+		$('#slider_' + i).val(0);
+	}
+	$('.np').removeClass('np');
+	calculate(null);
+}
+
+function initData() {
+	for (var i in data) {
+		var p = data[i];
+		pindex[p] = i;
+		
+		var rlist = raw[p];
+		var olist = [];
+		var plist = [];
+		var slist = [];
+		data[i] = {'name': p, 'order': olist, 'list': plist, 'sexual': slist};
+		
+		var mcnt = 0;
+		var fcnt = 0;
+		var mqueue = [];
+		var name, sex;
+		for (var t in rlist) {
+			sex = rlist[t].charAt(0);
+			// 建立資料時Debug用
+			// if (sex != 'M' && sex != 'F') console.log('Error! ' + p + ' /' + rlist[t]);
+			if (sex == 'M' && mcnt == fcnt) {
+				mqueue.push(t*1+1);
+			} else if (mcnt > fcnt) {
+				if (sex == 'M') {
+					mqueue.push(t*1+1);
+				} else {
+					olist.push(t*1+1);
+					olist.push(mqueue.shift());
+				}
+			} else {
+				olist.push(t*1+1);
+			}
+			
+			if (sex == 'M') mcnt += 1;
+			if (sex == 'F') fcnt += 1;
+			slist.push(sex);
+			plist.push(rlist[t].substring(1));
+		}
+	}
+}
+
+function initUI() {
+	for (var i in data) {
+		var c = '⓪①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㉑㉒㉓㉔㉕㉖㉗㉘㉙㉚㉛㉜㉝㉞㉟㊱㊲㊳㊴㊵㊶㊷㊸㊹㊺㊻㊼㊽㊾㊿'.charAt(i*1);
+		//c = '⓪';
+		var tr = $('<tr></tr>').appendTo(paties);
+		if (i*1 % 2 == 0) tr.addClass('even');
+		var th = $('<th class="party"></th>').appendTo(tr);
+		th.append($('<span class="name">' + data[i].name + '<em>' + c +'</em></span>'));
+		th.append($('<input id="rate_' + i + '" data-no="' + i + '" class="rate" value="0">'));
+		th.append($('<span class="rp">%</span>'));
+		th.append($('<span id="num_' + i + '" class="num"></span>'));
+		var pd = $('<td class="pd"></td>').appendTo(tr);
+		pd.append($('<input id="slider_' + i + '" class="slider" data-no="' + i + '" type="range" min="0" max="1" step="0.001" value="0" />'));
+		//pdiv.append($('<span id="num_' + i + '" class="num">0萬</span>'));
+		var respan = $('<span id="respan_' + i + '" class="respan"></span>').appendTo(pd);
+		respan.append($('<span id="rateX_' + i + '" class="rate">0%</span>'));
+		respan.append($('<span id="pass_' + i + '" class="pass">0</span>'));
+		var cands = $('<td class="cands" id="cands_' + i + '"></td>').appendTo(tr);
+		for (var j in data[i].list) {
+			cands.append($('<span class="c ' + data[i].sexual[j] + '"><sup>' + (j*1+1) + '</sup>' + data[i].list[j] + '</span>'));
+		}
+	}
+	
+	$('#pollsel').empty();
+	var seltext = '<h3>以歷屆選舉結果模擬</h3><ul>';
+	for (var n in results) seltext += '<li data-type="R"' + (results[n]['備註'] ? ' title="' + results[n]['備註'] + '"' : '') + '>' + n + '</li>';
+	seltext += '</ul><h3>以各家民調結果模擬</h3><ul>';
+	for (var n in polls) seltext += '<li data-type="P">' + n + '</li>';
+	seltext += '</ul>';
+	$('#pollsel').html(seltext);
+	
+	$(window).resize(function() {
+		$('.side').css({'height': ($('#main').height()-15) + 'px'});
+	}).resize();
+	
+	$('.pd').mouseover(function() {
+		$(this).find('.slider').show();
+		$(this).find('.respan').hide();
+	}).mouseout(function() {
+		$(this).find('.slider').hide();
+		$(this).find('.respan').show();
+	});
+	
+	$('.slider').on('input', function() {
+		calculate($(this));
+	}).on('change', function() {
+		calculate($(this));
+	});
+	
+	$('input.rate').on('change', function() {
+		$('#slider_' + $(this).data('no')).val($(this).val() / 100).change();
+	});
+	
+	$('#clear').click(function() { 
+		clearAll(false);
+		calculate(null);
+	});
+	
+	$('#pollsel li').on('click', function() {
+		clearAll(true);
+		
+		var self = $(this);
+		var g = self.data('type'); // val().charAt(0);
+		var key = self.text(); //val().substring(1);
+		self.addClass('np');
+		
+		var pdata = (g == 'R' ? results[key] : polls[key]);
+		if (!pdata) return;
+		for (var party in pdata) {
+			var i = pindex[party];
+			if (!i && partyMap[party]) i = pindex[partyMap[party]];
+			if (!i) continue;
+			$('#slider_' + i).val(pdata[party] / 100.0);
+		}
+		calculate(null);
+	});
+}
+
+$('#chk_qmode').change(function() { calculate(null); });
+
+initData();
+initUI();
+
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49505082-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</html>
