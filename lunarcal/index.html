@@ -1,0 +1,58 @@
+<!html>
+<head>
+<meta charset="utf-8">
+<title>農曆</title>
+<style>
+
+@font-face {
+	font-family: LunarCal;
+	src: url("LunarCal-Regular.ttf");
+}
+
+body { margin: 0; padding: 0 0 0 30px; background: #fff; font-family: '微軟正黑體' }
+div { margin: 0 }
+
+
+h2 { margin: 0 auto; text-align: center; font-size: 32px; margin-top: 20px }
+h2 #head { width: 9em; display: inline-block; color: #a52 }
+h2 .navi { color: #999; display: inline-block; padding: 0 24px; cursor: pointer }
+h2 #adyear { display: block; font-size: 24px; font-family: Garamond; font-weight: bold; color: #a52 }
+
+#cal { margin: 0 auto; border-top: 1px solid #999; margin-top: 10px }
+#cal td { text-align: center; padding: 4px 0; width: 90px; vertical-align: top }
+#cal td .d { font-size: 48px; font-family: LunarCal; display: block;
+	-moz-font-feature-settings: "ccmp=1";
+	-ms-font-feature-settings: "ccmp";
+	-webkit-font-feature-settings: "ccmp";
+	-o-font-feature-settings: "ccmp";
+	font-feature-settings: "ccmp";
+ }
+#cal .t { font-weight: bold; line-height: 1.8 }
+#cal th { font-weight: bold; font-size: 18px }
+#cal .w0 { color: #c14 }
+#cal .w6 { color: #082 }
+#cal .today { background: #feb; border-radius: 26px }
+#cal .x { color: #237; font-family: Georgia; font-size: 126%; font-weight: normal; letter-spacing: -0.06em; border-bottom: 3px solid #7df; padding: 2px 3px; line-height: 1.2 }
+
+
+</style>
+</head>
+<body lang="zh-tw">
+
+<h2>
+<span id="adyear"></span>
+<span id="prevy" class="navi">《</span>
+<span id="prev" class="navi">〈</span>
+<span id="head"></span>
+<span id="next" class="navi">〉</span>
+<span id="nexty" class="navi">》</span>
+</h2>
+<div id="main"></div>
+
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type="text/javascript" src="calendar.js" encoding="utf-8"></script>
+<script type="text/javascript" src="lunarcal.js" encoding="utf-8"></script>
+
+</html>
