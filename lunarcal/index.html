@@ -1,6 +1,8 @@
 <!html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
 <title>農曆</title>
 <style>
 
@@ -9,17 +11,21 @@
 	src: url("LunarCal-Regular.ttf");
 }
 
-body { margin: 0; padding: 0 0 0 30px; background: #fff; font-family: '微軟正黑體' }
+body { margin: 0; padding: 0 5px; background: #fff; font-family: '微軟正黑體' }
 div { margin: 0 }
 
+#body { margin: 0 auto; width: 480px }
+@media screen and (max-width: 600px) { #body { width: auto } } 
 
-h2 { margin: 0 auto; text-align: center; font-size: 32px; margin-top: 20px }
-h2 #head { width: 9em; display: inline-block; color: #a52 }
-h2 .navi { color: #999; display: inline-block; padding: 0 24px; cursor: pointer }
-h2 #adyear { display: block; font-size: 24px; font-family: Garamond; font-weight: bold; color: #a52 }
+h2 { margin: 0 auto; text-align: center; font-size: 28px; margin-top: 20px }
+h2 #head { width: 7em; display: inline-block; color: #a52 }
+h2 .navi { color: #999; display: inline-block; padding: 0 5px; cursor: pointer }
+h2 .left { float: left }
+h2 .right { float: right }
+h2 #adyear { display: block; font-size: 20px; font-family: Garamond; font-weight: bold; color: #a52 }
 
-#cal { margin: 0 auto; border-top: 1px solid #999; margin-top: 10px }
-#cal td { text-align: center; padding: 4px 0; width: 90px; vertical-align: top }
+#cal { width: 100%; border-top: 1px solid #999; margin-top: 10px }
+#cal td { text-align: center; padding: 4px 0; vertical-align: top }
 #cal td .d { font-size: 48px; font-family: LunarCal; display: block;
 	-moz-font-feature-settings: "ccmp=1";
 	-ms-font-feature-settings: "ccmp";
@@ -39,16 +45,17 @@ h2 #adyear { display: block; font-size: 24px; font-family: Garamond; font-weight
 </head>
 <body lang="zh-tw">
 
+<div id="body">
 <h2>
 <span id="adyear"></span>
-<span id="prevy" class="navi">《</span>
-<span id="prev" class="navi">〈</span>
+<span id="prevy" class="navi left">《</span>
+<span id="prev" class="navi left">〈</span>
 <span id="head"></span>
-<span id="next" class="navi">〉</span>
-<span id="nexty" class="navi">》</span>
+<span id="nexty" class="navi right">》</span>
+<span id="next" class="navi right">〉</span>
 </h2>
 <div id="main"></div>
-
+</div>
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
