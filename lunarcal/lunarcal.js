@@ -10,14 +10,14 @@ var HolidayLunar = {		// 除夕特例處理
 
 var HolidaySolar = {		// 清明特例處理
 	//'1-1': '元旦',		// 元旦跳過(為了顯示年分)
-	'2-28': '和平紀念日',
+	'2-28': '和平日',
 	'4-4': '兒童節',
 	'10-10': '雙十節'
 };
 
 function draw() {
-	$('#head').text(Now.ystr + Now.mstr + (Now.days == 30 ? '大' : '小'));
-	$('#adyear').text(Now.year);
+	$('#head').text(Now.mstr + (Now.days == 30 ? '大' : '小'));
+	$('#adyear').text(Now.year + ' ' + Now.ystr);
 	
 	var html = '<table id="cal">';
 	html += '<tr><th class="w0">日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th class="w6">土</th></tr>';

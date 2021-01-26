@@ -1,7 +1,9 @@
 <!html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=0.5">
+<meta name="viewport" content="width=device-width, initial-scale=0.6">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Medula+One&display=swap" rel="stylesheet">
 </head>
 <title>農曆</title>
 <style>
@@ -14,31 +16,31 @@
 body { margin: 0; padding: 0 5px; background: #fff; font-family: '微軟正黑體' }
 div { margin: 0 }
 
-#body { margin: 0 auto; width: 480px }
-@media screen and (max-width: 600px) { #body { width: auto } } 
+#body { margin: 0; max-width: 380px }
+/*@media screen and (min-width: 400px) { #body { width: 400px } } */
 
-h2 { margin: 0 auto; text-align: center; font-size: 26px; margin-top: 20px }
-h2 #head { width: 7em; display: inline-block; color: #a52 }
+h2 { margin: 0 auto; text-align: center; font-size: 30px; margin-top: 10px }
+h2 #head { width: 5em; display: inline-block; color: #a52 }
 h2 .navi { color: #999; display: inline-block; padding: 0 5px; cursor: pointer }
 h2 .left { float: left }
 h2 .right { float: right }
-h2 #adyear { display: block; font-size: 20px; font-family: Garamond; font-weight: bold; color: #a52 }
+h2 #adyear { display: block; font-size: 24px; font-family: Garamond; font-weight: bold; color: #a52 }
 
 #cal { width: 100%; border-top: 1px solid #999; margin-top: 10px }
-#cal td { text-align: center; padding: 4px 0; vertical-align: top }
-#cal td .d { font-size: 40px; font-family: LunarCal; display: block;
+#cal td { text-align: center; padding: 1px 0; vertical-align: top }
+#cal td .d { font-size: 40px; font-family: LunarCal; display: block; line-height: 1;
 	-moz-font-feature-settings: "ccmp=1";
 	-ms-font-feature-settings: "ccmp";
 	-webkit-font-feature-settings: "ccmp";
 	-o-font-feature-settings: "ccmp";
 	font-feature-settings: "ccmp";
  }
-#cal .t { font-weight: bold; line-height: 1.8 }
+#cal .t { font-weight: bold; line-height: 1.6; font-size: 16px }
 #cal th { font-weight: bold; font-size: 18px }
 #cal .w0 { color: #c14 }
 #cal .w6 { color: #082 }
-#cal .today { background: #feb; border-radius: 26px }
-#cal .x { color: #237; font-family: Georgia; font-size: 110%; font-weight: normal; letter-spacing: -0.06em; border-bottom: 3px solid #7df; padding: 3px 3px; line-height: 1.2 }
+#cal .today { background: #feb; border-radius: 10px }
+#cal .x { color: #237; font-family: 'Medula One', cursive; font-size: 20px; font-weight: normal; letter-spacing: 0; border-bottom: 3px solid #7df; padding: 1px; line-height: 1.3 }
 
 
 </style>
