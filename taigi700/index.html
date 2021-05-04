@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-tw" lang="zh-tw">
+<head>
+<title>教育部700建議用字練習</title>
+<meta charset="utf-8">
+<meta name="theme-color" content="#f0511d">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<style>
+@font-face{
+    font-family: NunitoPOJ; font-weight: 600;
+	src: url(NunitoPOJ-Regular.ttf) format("truetype");
+}
+
+@font-face{
+    font-family: GenYoExt; font-weight: 600;
+	src: url(GenYoExt-R.woff2) format("woff2"), url(GenYoExt-R.woff) format("woff"), url(GenYoExt-R.otf) format("opentype");
+}
+
+body { text-align: center; background-color: #fadfd7; margin: 0 }
+
+#head { background-color: #222; height: 40px; padding: 10px; color: #fff; font-size: 24px }
+#head select { height: 40px; font-size: 25px; background-color: #222; color: #fff }
+
+#ques > span { display: block; margin: 25px 0 }
+#word { font-size: 80px; font-family: GenYoExt }
+#read { font-size: 50px; font-family: NunitoPOJ }
+	#read span { display: block }
+#mean { font-size: 32px }
+#sample { font-size: 32px; font-family: NunitoPOJ }
+
+.hide { visibility: hidden }
+
+#butts { margin-top: 50px }
+#butts button { font-size: 35px }
+
+</style>
+<body lang="zh-tw">
+<div id="head">
+	欲考啥物：<select id="mode">
+		<option value="word">推薦用字</option>
+		<option value="read">讀音</option>
+		<option value="mean">華語解釋</option>
+	</select>
+</div>
+
+<div id="ques">
+	<span id="word"></span>
+	<span id="sample"></span>
+	<span id="read"></span>
+	<span id="mean"></span>
+</div>
+
+<div id="butts">
+	<button id="show">顯示答案</button>
+	<button id="next">下一題</button>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" charset="utf-8"></script>
+<script src="moe700.js" charset="utf-8"></script>
+<script>
+
+var mode = null; //'word';
+
+$('#mode').change(function() {
+	mode = $('#mode').val();
+	$('.hide').removeClass('hide');
+	$('#'+mode).addClass('hide');
+}).change();
+
+$('#show').click(function() {
+	$('.hide').removeClass('hide');
+
+	$('#show').hide();
+	$('#next').show();
+});
+
+$('#next').click(function() {
+	var i = Math.floor(Math.random() * moe700.length);
+	var q = moe700[i];
+	
+	var reads = '';
+	for (var r in q.read) reads += '<span>' + q.read[r] + '</span>';
+	
+	$('#'+mode).addClass('hide');
+	$('#word').text(q.word);
+	$('#read').html(reads);
+	$('#mean').text(q.mean);
+	$('#sample').addClass('hide').text(q.sample);
+	
+	$('#next').hide();
+	$('#show').show();
+}).click();
+
+</script>
+
+<!--script src="game.js" charset="utf-8"></script-->
+</html>
