@@ -16,22 +16,24 @@
 	src: url(GenYoExt-R.woff2) format("woff2"), url(GenYoExt-R.woff) format("woff"), url(GenYoExt-R.otf) format("opentype");
 }
 
-body { text-align: center; background-color: #fadfd7; margin: 0 }
+body { text-align: center; background-color: #fcede8; margin: 0; font-family: sans-serif }
 
 #head { background-color: #222; height: 40px; padding: 10px; color: #fff; font-size: 24px }
 #head select { height: 40px; font-size: 25px; background-color: #222; color: #fff }
 
-#ques > span { display: block; margin: 25px 0 }
-#word { font-size: 80px; font-family: GenYoExt }
-#read { font-size: 50px; font-family: NunitoPOJ }
+#ques { padding: 20px 10px }
+#ques > span { display: block; margin-bottom: 20px }
+#word { font-size: 80px; font-family: GenYoExt; color: #521b0b }
+#read { font-size: 50px; font-family: NunitoPOJ; color: #184178 }
 	#read span { display: block }
 #mean { font-size: 32px }
-#sample { font-size: 32px; font-family: NunitoPOJ }
+#hint { font-size: 32px; font-family: NunitoPOJ; color: #19451b }
 
 .hide { visibility: hidden }
 
-#butts { margin-top: 50px }
+#butts { margin: 15px; position: fixed; bottom: 0; width: 100% }
 #butts button { font-size: 35px }
+#showhint { font-size: 18px; display: block; margin: 0 auto 20px auto }
 
 </style>
 <body lang="zh-tw">
@@ -45,14 +47,15 @@ body { text-align: center; background-color: #fadfd7; margin: 0 }
 
 <div id="ques">
 	<span id="word"></span>
-	<span id="sample"></span>
+	<span id="hint"></span>
+	<button id="showhint">顯示用例提示</button>
 	<span id="read"></span>
 	<span id="mean"></span>
 </div>
 
 <div id="butts">
-	<button id="show">顯示答案</button>
-	<button id="next">下一題</button>
+	<button id="show">對答案</button>
+	<button id="next">後一題</button>
 </div>
 
 </body>
@@ -68,8 +71,15 @@ $('#mode').change(function() {
 	$('#'+mode).addClass('hide');
 }).change();
 
+$('#showhint').click(function() {
+	$('#hint').show();
+	$('#showhint').hide();
+});
+
 $('#show').click(function() {
 	$('.hide').removeClass('hide');
+	$('#hint').show();
+	$('#showhint').hide();
 
 	$('#show').hide();
 	$('#next').show();
@@ -86,7 +96,8 @@ $('#next').click(function() {
 	$('#word').text(q.word);
 	$('#read').html(reads);
 	$('#mean').text(q.mean);
-	$('#sample').addClass('hide').text(q.sample);
+	$('#hint').text(q.sample).hide();
+	$('#showhint').show();
 	
 	$('#next').hide();
 	$('#show').show();
