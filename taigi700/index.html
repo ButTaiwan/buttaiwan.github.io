@@ -17,13 +17,15 @@
 }
 
 body { text-align: center; background-color: #fcede8; margin: 0; font-family: sans-serif }
+div { margin: 0 }
 
 #head { background-color: #222; height: 40px; padding: 10px; color: #fff; font-size: 24px }
 #head select { height: 40px; font-size: 25px; background-color: #222; color: #fff }
 
 #ques { padding: 20px 10px }
 #ques > span { display: block; margin-bottom: 20px }
-#word { font-size: 80px; font-family: GenYoExt; color: #521b0b }
+#no { font-size: 20px; color: #a39996; margin-bottom: 10px !important }
+#word { font-size: 70px; font-family: GenYoExt; color: #521b0b; line-height: 90px }
 #read { font-size: 50px; font-family: NunitoPOJ; color: #184178 }
 	#read span { display: block }
 #mean { font-size: 32px }
@@ -46,6 +48,7 @@ body { text-align: center; background-color: #fcede8; margin: 0; font-family: sa
 </div>
 
 <div id="ques">
+	<span id="no"></span>
 	<span id="word"></span>
 	<span id="hint"></span>
 	<button id="showhint">顯示用例提示</button>
@@ -93,6 +96,7 @@ $('#next').click(function() {
 	for (var r in q.read) reads += '<span>' + q.read[r] + '</span>';
 	
 	$('#'+mode).addClass('hide');
+	$('#no').text(q.no);
 	$('#word').text(q.word);
 	$('#read').html(reads);
 	$('#mean').text(q.mean);
