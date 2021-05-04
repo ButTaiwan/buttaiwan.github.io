@@ -30,6 +30,7 @@ div { margin: 0 }
 	#read span { display: block }
 #mean { font-size: 32px }
 #hint { font-size: 32px; font-family: NunitoPOJ; color: #19451b }
+#mean > span, #hint > span { white-space: nowrap }
 
 .hide { visibility: hidden }
 
@@ -68,6 +69,13 @@ div { margin: 0 }
 
 var mode = null; //'word';
 
+function toSpans(str) {
+	var res = '';
+	var tmp = str.split(/、/);
+	for (var i in tmp) res += '<span>' + tmp[i] + (i == tmp.length-1 ? '' : '、') + '</span>';
+	return res;
+}
+
 $('#mode').change(function() {
 	mode = $('#mode').val();
 	$('.hide').removeClass('hide');
@@ -99,8 +107,8 @@ $('#next').click(function() {
 	$('#no').text(q.no);
 	$('#word').text(q.word);
 	$('#read').html(reads);
-	$('#mean').text(q.mean);
-	$('#hint').text(q.sample).hide();
+	$('#mean').html(toSpans(q.mean));
+	$('#hint').html(toSpans(q.sample)).hide();
 	$('#showhint').show();
 	
 	$('#next').hide();
