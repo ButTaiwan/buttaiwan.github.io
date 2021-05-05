@@ -37,6 +37,8 @@ div { margin: 0 }
 #butts { margin: 15px 0; position: fixed; bottom: 0; width: 100% }
 #butts button { font-size: 35px }
 #showhint { font-size: 18px; display: block; margin: 0 auto 20px auto }
+#star { position: absolute; right: 20px; bottom: 5px; font-size: 40px }
+	.gray { filter: grayscale(100%); opacity: 0.3 }
 
 </style>
 <body lang="zh-tw">
@@ -45,6 +47,9 @@ div { margin: 0 }
 		<option value="word">推薦用字</option>
 		<option value="read">讀音</option>
 		<option value="mean">華語解釋</option>
+		<option value="starword">生份的推薦用字</option>
+		<option value="starread">生份的讀音</option>
+		<option value="starmean">生份的華語解釋</option>
 	</select>
 </div>
 
@@ -60,6 +65,7 @@ div { margin: 0 }
 <div id="butts">
 	<button id="show">對答案</button>
 	<button id="next">後一題</button>
+	<span id="star" class="gray">⭐</div>
 </div>
 
 </body>
@@ -67,7 +73,12 @@ div { margin: 0 }
 <script src="moe700.js" charset="utf-8"></script>
 <script>
 
+//var initialized = false;
 var mode = null; //'word';
+var onlyStarred = false;
+
+var qindex = {};
+for (var i in moe700) qindex[moe700[i].no + ''] = i;
 
 function toSpans(str) {
 	var res = '';
@@ -78,8 +89,11 @@ function toSpans(str) {
 
 $('#mode').change(function() {
 	mode = $('#mode').val();
+	onlyStarred = mode.substring(0, 4) == 'star';
+	if (onlyStarred) mode = mode.substring(4);
 	$('.hide').removeClass('hide');
 	$('#'+mode).addClass('hide');
+	$('#next').click();
 }).change();
 
 $('#showhint').click(function() {
@@ -97,8 +111,27 @@ $('#show').click(function() {
 });
 
 $('#next').click(function() {
-	var i = Math.floor(Math.random() * moe700.length);
-	var q = moe700[i];
+	var q = null
+	if (onlyStarred) {
+		var marklist = getMarks(mode, no);
+		if (marklist == null || marklist.length == 0) {
+			$('#no').text('');
+			$('#word').text('');
+			$('#read').html('Bô mi̍h-kiānn').removeClass('hide');
+			$('#mean').html('<span>你無已經標示生份的詞。</span><span>若拄著記袂牢的詞，</span><span>會使揤星仔共加入來。</span>').removeClass('hide');
+			$('#hint').html('').hide();
+			$('#showhint').hide();
+			$('#star').hide();
+			$('#next').hide();
+			$('#show').hide();
+			return;
+		}
+		var i = Math.floor(Math.random() * marklist.length);
+		q = moe700[qindex[marklist[i]]];
+	} else {
+		var i = Math.floor(Math.random() * moe700.length);
+		q = moe700[i];
+	}
 	
 	var reads = '';
 	for (var r in q.read) reads += '<span>' + q.read[r] + '</span>';
@@ -111,11 +144,38 @@ $('#next').click(function() {
 	$('#hint').html(toSpans(q.sample)).hide();
 	$('#showhint').show();
 	
+	$('#star').show().addClass('gray');
+	if (isMarked(mode, q.no)) $('#star').removeClass('gray');
+	
 	$('#next').hide();
 	$('#show').show();
 }).click();
 
+$('#star').click(function() {
+	var val = $(this).hasClass('gray');
+	setMarked(mode, $('#no').text(), val);
+	$(this).toggleClass('gray');
+});
+
+function isMarked(mode, no) {
+	var marks = localStorage.getItem('taigi700_' + mode);
+	if (marks == null || marks == '') return false;
+	return marks.match('&' + no + '&');
+}
+
+function getMarks(mode, no) {
+	var marks = localStorage.getItem('taigi700_' + mode);
+	if (marks == null || marks == '' || marks == '&') return null;
+	return marks.replace(/^\&|\&$/g, '').split('&');
+}
+
+function setMarked(mode, no, val) {
+	var marks = localStorage.getItem('taigi700_' + mode);
+	if (marks != null && marks != '') marks = marks.replace('&' + no + '&', '&').replace(/\&+/g, '&');
+	if (val) marks = ((marks != null && marks != '' && marks != '&') ? marks : '&') + no + '&';
+	localStorage.setItem('taigi700_' + mode, marks);
+}
+
 </script>
 
-<!--script src="game.js" charset="utf-8"></script-->
 </html>
