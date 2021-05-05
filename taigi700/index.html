@@ -37,8 +37,11 @@ div { margin: 0 }
 #butts { margin: 15px 0; position: fixed; bottom: 0; width: 100% }
 #butts button { font-size: 35px }
 #showhint { font-size: 18px; display: block; margin: 0 auto 20px auto }
-#star { position: absolute; right: 20px; bottom: 5px; font-size: 40px }
+
+#butts span {  display: block; width: 1.2em; position: absolute; line-height: 1.2; font-size: 40px; cursor: pointer; bottom: 5px }
+#star { right: 10px }
 	.gray { filter: grayscale(100%); opacity: 0.6 }
+#back { left: 10px; color: #666 }
 
 </style>
 <body lang="zh-tw">
@@ -63,9 +66,10 @@ div { margin: 0 }
 </div>
 
 <div id="butts">
+	<span id="back">🡰</span>
+	<span id="star" class="gray">⭐</span>
 	<button id="show">對答案</button>
 	<button id="next">後一題</button>
-	<span id="star" class="gray">⭐</div>
 </div>
 
 </body>
@@ -73,9 +77,12 @@ div { margin: 0 }
 <script src="moe700.js" charset="utf-8"></script>
 <script>
 
+var ques = null;
+var qi = null;
+
 //var initialized = false;
 var mode = null; //'word';
-var onlyStarred = false;
+// var onlyStarred = false;
 
 var qindex = {};
 for (var i in moe700) qindex[moe700[i].no + ''] = i;
@@ -86,15 +93,6 @@ function toSpans(str) {
 	for (var i in tmp) res += '<span>' + tmp[i] + (i == tmp.length-1 ? '' : '、') + '</span>';
 	return res;
 }
-
-$('#mode').change(function() {
-	mode = $('#mode').val();
-	onlyStarred = mode.substring(0, 4) == 'star';
-	if (onlyStarred) mode = mode.substring(4);
-	$('.hide').removeClass('hide');
-	$('#'+mode).addClass('hide');
-	$('#next').click();
-}).change();
 
 $('#showhint').click(function() {
 	$('#hint').show();
@@ -111,27 +109,12 @@ $('#show').click(function() {
 });
 
 $('#next').click(function() {
-	var q = null
-	if (onlyStarred) {
-		var marklist = getMarks(mode, no);
-		if (marklist == null || marklist.length == 0) {
-			$('#no').text('');
-			$('#word').text('');
-			$('#read').html('Bô mi̍h-kiānn').removeClass('hide');
-			$('#mean').html('<span>你無已經標示生份的詞。</span><span>若拄著記袂牢的詞，</span><span>會使揤星仔共加入來。</span>').removeClass('hide');
-			$('#hint').html('').hide();
-			$('#showhint').hide();
-			$('#star').hide();
-			$('#next').hide();
-			$('#show').hide();
-			return;
-		}
-		var i = Math.floor(Math.random() * marklist.length);
-		q = moe700[qindex[marklist[i]]];
-	} else {
-		var i = Math.floor(Math.random() * moe700.length);
-		q = moe700[i];
+	if (qi >= ques.length) {
+		$('#mode').change();
+		return;
 	}
+	
+	var q = ques[qi];
 	
 	var reads = '';
 	for (var r in q.read) reads += '<span>' + q.read[r] + '</span>';
@@ -149,7 +132,58 @@ $('#next').click(function() {
 	
 	$('#next').hide();
 	$('#show').show();
-}).click();
+	if (qi >= 1) $('#back').show(); else $('#back').hide();
+	
+	qi++;
+});
+
+$('#mode').change(function() {
+	mode = $('#mode').val();
+	var onlyStarred = mode.substring(0, 4) == 'star';
+	if (onlyStarred) mode = mode.substring(4);
+	
+	ques = [];
+	if (onlyStarred) {
+		var marklist = getMarks(mode, no);
+		if (marklist == null || marklist.length == 0) {
+			$('#no').text('');
+			$('#word').text('');
+			$('#read').html('Bô mi̍h-kiānn').removeClass('hide');
+			$('#mean').html('<span>你無已經標示生份的詞。</span><span>若拄著記袂牢的詞，</span><span>會使揤星仔共加入來。</span>').removeClass('hide');
+			$('#hint').html('').hide();
+			$('#showhint').hide();
+			$('#star').hide();
+			$('#next').hide();
+			$('#show').hide();
+			$('#back').hide();
+			return;
+		}
+		for (var i in marklist) ques.push(moe700[qindex[marklist[i]]]);
+	} else {
+		for (var i in moe700) ques.push(moe700[i]);
+	}
+	
+	// shuffle
+	for (var i=0; i<ques.length; i++) {
+		var j = Math.floor(Math.random() * ques.length);
+		if (i == j) continue;
+		var tmp = ques[i];
+		ques[i] = ques[j];
+		ques[j] = tmp;
+	}
+	qi = 0;
+	
+	$('.hide').removeClass('hide');
+	$('#'+mode).addClass('hide');
+	$('#next').click();
+}).change();
+
+$('#back').click(function() {
+	qi -= 2;
+	$('#next').click();
+	$('#show').click();
+});
+
 
 $('#star').click(function() {
 	var val = $(this).hasClass('gray');
