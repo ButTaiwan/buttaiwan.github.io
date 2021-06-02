@@ -1,6 +1,12 @@
 var text = [];
 var curr = -1;
 var vsbase = 0xe01e0;
+window.textinfo = {};
+
+String.prototype.unicharAt = function (i) {
+	if (this.charAt(i).match(/[\ud800-\udb7f]/)) return this.substr(i, 2);
+	return this.charAt(i);
+};
 
 function chr(uni) {
 	if (String.fromCodePoint) return String.fromCodePoint(uni);	// ES6
@@ -9,7 +15,7 @@ function chr(uni) {
 								0xdc00 | ((uni-0x10000) & 0x03ff));
 }
 
-function match(c, i, p, j) {
+function match(c, i, p, j, onlydic) {
 	var pos = p.indexOf('*');
 	if (i-pos<0) return false;
 	if (i-pos+p.length>text.length) return false;
@@ -18,12 +24,30 @@ function match(c, i, p, j) {
 	for (var z=i-pos; z<i-pos+p.length; z++) tmp += text[z].charAt(0);
 	if (tmp != p.replace(/\*/g, c)) return false;
 	
+	var phrase = p.replace("*",c);
 	for (var x=0; x<p.length; x++) {
-		if (p.charAt(x) == '*') {
-			var a = i-pos+x;
+		var a = i-pos+x;
+		var spDom = $('#sp' + a);
+		
+		// update ivs
+		if (p.charAt(x) == '*' && !onlydic) {
 			text[a] = c + (j > 0 ? chr(vsbase + j*1) : '');
-			$('#sp' + a).text(text[a]).addClass('auto');
+			spDom.text(text[a]).addClass('auto');
 		}
+
+		// update phrase for dic
+		if(!textinfo[a]){
+			textinfo[a] = {};
+		}
+		var ivsinfo = textinfo[a];
+		var phrasearr = ivsinfo.phrasearr;		
+		var phrasedata = {phrase:phrase,x:x,a:a};
+		if(phrasearr === undefined){
+			phrasearr = [phrasedata];
+		} else {
+			phrasearr.push(phrasedata);
+		} 
+		ivsinfo.phrasearr = phrasearr;
 	}
 }
 
@@ -32,14 +56,19 @@ function autoSelect() {
 		var t = text[i];
 		var c = t.charAt(0);
 		if (!data[c]) continue;
-		if (t.length > 1) continue;
+		var onlydic = false;
+		if (t.length > 1) {
+			// For IVS char, do not overwrite the inserted text
+			onlydic = true;
+		};
+		//if (t.length > 1) continue;
 		if (!data[c].v) continue;
 		
 here:	for (var j in data[c].v) {
 			if (!data[c].v[j]) continue;
 			var list = data[c].v[j].split('/');
 			for (var n=0; n<list.length; n++) {
-				if (match(c, i, list[n], j)) break here;
+				if (match(c, i, list[n], j, onlydic)) break here;
 			}
 			//console.log(list);
 		}
@@ -87,7 +116,9 @@ function setEditorText(t) {
 	
 	// [\ud800-\udfff] means surrogate pairs of UTF-16
 	// Here I wrote /(.|\n)/g because MS Edge doesn't support /(.)/s.
-	text = t.replace(/(.|\n)/g, "\x01$1").replace(/\x01([\ud800-\udfff])/g, "$1").split(/\x01/);
+	//text = t.replace(/(.|\n)/g, "\x01$1").replace(/\x01([\ud800-\udfff])/g, "$1").split(/\x01/);
+	text = t.replace(/(.|\n)/g, "\x01$1").replace(/\x01([\udb40\udc00-\udfff])/g, "$1").split(/\x01/);
+	textinfo = {};
 
 	var editor = $('#editor');
 	$('#editor').empty();
@@ -135,7 +166,7 @@ $('#start').click(function() {
 	$('#start').hide();
 	$('#info2').show();
 	$('#info1').hide();
-	
+
 	setEditorText(t);
 });
 

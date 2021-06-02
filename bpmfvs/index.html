@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-hant-TW">
 <head>
-	<title>注音IVS字型輸入工具</title>
 <meta charset="utf-8"></head>
 <style>
-p { font-family: 'ㄅ字嗨注音標楷'; font-size: 36px; line-height: 1.4; margin: 0 }
+@font-face { font-family: ZY; src: url('BpmfZihiKaiStd-Regular.ttf'); }
+p { font-family: ZY; font-size: 36px; line-height: 1.4; margin: 0 }
 .hide { display: none }
 
 body { background: #b0ebe4 }
 #body { position: relative; margin: 10px auto; padding: 10px 10px 130px 10px; background: #fff8f4 }
 
 .info { height: 44px; font-family: 微軟正黑體, sans-serif; font-size: 26px }
-.info span { font-size: 32px; font-family: 'ㄅ字嗨注音標楷'; margin-right: 5px }
-#info0 { display: block; float: right;}
+.info span { font-size: 32px; font-family: ZY; margin-right: 5px }
 
 #main { width: 100%; padding: 0; margin: 0 0 5px 0 }
-#input { font-family: 'ㄅ字嗨注音標楷'; height: 100%; font-size: 32px; line-height: 1.5; background: #fff; width: 100%; padding: 0; vertical-align: bottom; }
-#editor { font-family: 'ㄅ字嗨注音標楷'; height: 100%; font-size: 32px; line-height: 1.5; background: #fff; overflow: auto; padding: 0; display: none; border: 1px solid #777 }
+#input { font-family: ZY; height: 100%; font-size: 32px; line-height: 1.5; background: #fff; width: 100%; padding: 0; vertical-align: bottom; }
+#editor { font-family: ZY; height: 100%; font-size: 32px; line-height: 1.5; background: #fff; overflow: auto; padding: 0; display: none; border: 1px solid #777 }
 
-#panel { box-sizing: border-box; width: 100%; height: 106px; padding: 10px; background: #b0ebe4; user-select: none }
+#panel { box-sizing: border-box; width: 100%; height: 106px; padding: 10px; background: #b0ebe4; user-select: none; }
 #panel .navi { float: left; font-size: 30px; line-height: 80px; color: #fff; cursor: pointer }
-#selector { float: left; width: 706px; font-family: 'ㄅ字嗨注音標楷'; font-size: 68px; line-height: 1.2; border-radius: 15px; }
+#selector { float: left; width: 706px; font-family: ZY; font-size: 68px; line-height: 1.2; border-radius: 15px; }
 #selector span { background-color: #ddd; float: left; margin: 0 5px; border-radius: 15px; padding-left: 5px; cursor: pointer }
 #selector span:hover { background-color: #fff;}
 #panel #next { float: right }
@@ -33,12 +32,10 @@ span.curr { border: 2px solid #439abf }
 span.fuzzy { background: #f7b0c0; }
 span.auto { background: #f7cfb0; }
 span.ok { background: #98fade; }
-
 </style>
 <body>
 
 <div id="body">
-<a id="info0" class="info" href="https://github.com/ButTaiwan/bpmfvs/blob/master/ime/README.md" target="_blank">使用說明</a>
 <div id="info1" class="info">請貼上要標註注音的文章，然後按下開始：</div>
 <div id="info2" class="info hide">
 	<span class="p">字</span>多音字　
@@ -47,7 +44,7 @@ span.ok { background: #98fade; }
 	<span class="p ok">字</span>已選擇讀音
 </div>
 <div id="main">
-	<textarea id="input"></textarea>
+	<textarea id="input"></textarea>	
 	<div id="editor">abs</div>
 </div>
 <div id="panel">
@@ -63,7 +60,9 @@ span.ok { background: #98fade; }
 <!--span>和</span><span>和&#xfe01;</span><span>和&#xfe02;</span><span>和&#xfe03;</span><span>和&#xfe04;</span><span>和&#xfe05;</span-->
 
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="jquery.min.js"></script>
 <script src="poyin_db.js" charset="utf-8"></script>
 <script src="ime.js" charset="utf-8"></script>
+<script src="tzdic/tzdicui.js" charset="utf-8"></script>
+<script src="zhdicui.js" charset="utf-8"></script>
 </html>
