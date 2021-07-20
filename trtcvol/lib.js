@@ -88,7 +88,7 @@ function countTops(counts) {
 		for (var i in tmp) {
 			//if (tmp[i].c == 0) continue;
 			var ym = tmp[i].ym;
-			if (i*1 < 20) tops[sta][ym] = i*1+1;
+			if (i*1 <= 10) tops[sta][ym] = i*1+1;
 			else if (i >= tmp.length-10) tops[sta][ym] = i*1-tmp.length;
 		}
 	}
@@ -172,9 +172,9 @@ function showMonthUI(ym) {
 		}
 		
 		html += '<td>' + (newRecord ? '*' : '');
-		if (tops[sta][ym] > 0 && tops[sta][ym] <= 3) {
+		if (tops[sta][ym] > 0 && tops[sta][ym] <= 5) {
 			html += '<span class="up">' + (' ①②③④⑤'.charAt(tops[sta][ym]*1)) + '</span>';
-		} else if (tops[sta][ym] < 0 && tops[sta][ym] >= -3) {
+		} else if (tops[sta][ym] < 0 && tops[sta][ym] >= -5) {
 			html += '<span class="dn">' + (' ①②③④⑤'.charAt(-tops[sta][ym]*1)) + '</span>';
 		}
 		html += '</td>';
@@ -292,7 +292,7 @@ function showStationUI(sta) {
 
 function setUI() {
 	var val = decodeURIComponent((window.location.hash + '').replace(/^#/, ''));
-	if (val.match(/^20[01]\d{3}$/)) {
+	if (val.match(/^20[0-3]\d{3}$/)) {
 		showMonthUI(val);
 	} else if (counts[val]) {
 		showStationUI(val);
