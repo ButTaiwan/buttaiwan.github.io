@@ -173,7 +173,7 @@ function showMonthUI(ym) {
 		
 		html += '<td>' + (newRecord ? '*' : '');
 		if (tops[sta][ym] > 0 && tops[sta][ym] <= 5) {
-			html += '<span class="up">' + (' ①②③④⑤'.charAt(tops[sta][ym]*1)) + '</span>';
+			html += '<span class="up">' + (' ①②③④⑤⑥⑦⑧⑨⑩'.charAt(tops[sta][ym]*1)) + '</span>';
 		} else if (tops[sta][ym] < 0 && tops[sta][ym] >= -5) {
 			html += '<span class="dn">' + (' ①②③④⑤'.charAt(-tops[sta][ym]*1)) + '</span>';
 		}
@@ -214,7 +214,7 @@ function showMonthUI(ym) {
 	html += '<li>歷史資料來源：<a href="https://www.ptt.cc/bbs/MRT/index.html" target="_blank">批踢踢實業坊(ptt.cc) MRT板</a>精華區<br>';
 	html += '<li>若本月運量為通車以來最高，則以「*」註記。';
 	html += '<li>旅客比：在此站進出的旅客比例。計算方式： (日均進出人次/當月全站進出人次總和) × 2';
-	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">③</span>高與前<span class="dn">③</span>低的月份。';
+	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">⑤</span>高與前<span class="dn">⑤</span>低的月份。';
 	html += '<li><span class="rd">&nbsp;&nbsp;&nbsp;</span>色塊內「<span class="up">↑</span>」及「<span class="dn">↓</span>」分別表示該車站名次比上月上升及下降（數字為排名數）；';
 	html += '「<span class="up">▲</span>」及「<span class="dn">▼</span>」分別表示運量比去年同期成長及衰退最多之車站（數字為依成長或衰退百分比排名之名次）。';
 	html += '</ol>';
