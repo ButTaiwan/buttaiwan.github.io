@@ -5,6 +5,7 @@
 }
 
 html, body {
+  scroll-behavior: smooth;
   background-color: #000;
   color: #ccc;
   margin: 0px;
@@ -505,15 +506,23 @@ section.margin.article.article1 {
 .article2 .huatimg.pc .himg.l img.siantshau:hover, .article2 .huatimg.pc .himg.l img.hantsiinn:hover, .article2 .huatimg.pc .himg.l img.hingjin:hover {
   transform: scale(1.15);
 }
-.article2 .huatimg.pc .m {
+.article2 .huatimg.pc img.a, .article2 .huatimg.pc img.b, .article2 .huatimg.pc img.c {
   position: absolute;
-  left: 50%;
-  top: 150px;
-  transform: translateX(-40%);
+  top: 220px;
 }
-.article2 .huatimg.pc .m img {
-  position: relative;
-  width: 500px;
+.article2 .huatimg.pc img.a {
+  left: 270px;
+  width: 170.598733px;
+}
+.article2 .huatimg.pc img.b {
+  top: 178px;
+  left: 440.1px;
+  width: 208.2038px;
+}
+.article2 .huatimg.pc img.c {
+  top: 270px;
+  left: 647.1px;
+  width: 76.1274px;
 }
 .article2 .huatimg.pc .himg.r img {
   position: absolute;
