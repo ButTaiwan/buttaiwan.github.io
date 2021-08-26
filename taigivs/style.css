@@ -485,44 +485,34 @@ section.margin.article.article1 {
   position: absolute;
   width: 190px;
 }
-.article2 .huatimg.pc .himg.l img.siantshau {
+.article2 .huatimg.pc .himg.l img.hsiantshau {
   position: absolute;
   left: 170px;
   top: 70px;
   width: 160px;
 }
-.article2 .huatimg.pc .himg.l img.hantsiinn {
+.article2 .huatimg.pc .himg.l img.hhantsiinn {
   position: absolute;
   width: 210px;
   top: 165px;
   left: 100px;
 }
-.article2 .huatimg.pc .himg.l img.hingjin {
+.article2 .huatimg.pc .himg.l img.hhingjin {
   position: absolute;
   width: 160px;
   top: 235px;
   left: -38px;
 }
-.article2 .huatimg.pc .himg.l img.siantshau:hover, .article2 .huatimg.pc .himg.l img.hantsiinn:hover, .article2 .huatimg.pc .himg.l img.hingjin:hover {
-  transform: scale(1.15);
-}
-.article2 .huatimg.pc img.a, .article2 .huatimg.pc img.b, .article2 .huatimg.pc img.c {
+.article2 .huatimg.pc .himg.m {
+  pointer-events: none;
   position: absolute;
-  top: 220px;
+  left: 50%;
+  top: 150px;
+  transform: translateX(-40%);
 }
-.article2 .huatimg.pc img.a {
-  left: 270px;
-  width: 170.598733px;
-}
-.article2 .huatimg.pc img.b {
-  top: 178px;
-  left: 440.1px;
-  width: 208.2038px;
-}
-.article2 .huatimg.pc img.c {
-  top: 270px;
-  left: 647.1px;
-  width: 76.1274px;
+.article2 .huatimg.pc .himg.m img {
+  position: relative;
+  width: 500px;
 }
 .article2 .huatimg.pc .himg.r img {
   position: absolute;
@@ -533,23 +523,20 @@ section.margin.article.article1 {
   top: 25px;
   left: 770px;
 }
-.article2 .huatimg.pc .himg.r img.tshiantshau {
+.article2 .huatimg.pc .himg.r img.htshiantshau {
   top: 5px;
   width: 190px;
   left: 560px;
 }
-.article2 .huatimg.pc .himg.r img.hantsuinn {
+.article2 .huatimg.pc .himg.r img.hhantsuinn {
   width: 210px;
   top: 100px;
   left: 640px;
 }
-.article2 .huatimg.pc .himg.r img.hinglin {
+.article2 .huatimg.pc .himg.r img.hhinglin {
   width: 160px;
   top: 170px;
   left: 800px;
-}
-.article2 .huatimg.pc .himg.r img.tshiantshau:hover, .article2 .huatimg.pc .himg.r img.hantsuinn:hover, .article2 .huatimg.pc .himg.r img.hinglin:hover {
-  transform: scale(1.15);
 }
 .article2 a {
   color: #ddd;
@@ -1042,26 +1029,23 @@ footer {
     position: absolute;
     width: 120px;
   }
-  .article2 .huatimg.mb .himg.l img.siantshau {
+  .article2 .huatimg.mb .himg.l img.hsiantshau {
     position: absolute;
     left: 150px;
     top: 70px;
     width: 140px;
   }
-  .article2 .huatimg.mb .himg.l img.hantsiinn {
+  .article2 .huatimg.mb .himg.l img.hhantsiinn {
     position: absolute;
     width: 160px;
     top: 145px;
     left: 130px;
   }
-  .article2 .huatimg.mb .himg.l img.hingjin {
+  .article2 .huatimg.mb .himg.l img.hhingjin {
     position: absolute;
     width: 140px;
     top: 190px;
     left: 18px;
-  }
-  .article2 .huatimg.mb .himg.l img.siantshau:hover, .article2 .huatimg.mb .himg.l img.hantsiinn:hover, .article2 .huatimg.mb .himg.l img.hingjin:hover {
-    transform: scale(1.15);
   }
   .article2 .huatimg.mb .m {
     left: 60px;
@@ -1086,23 +1070,20 @@ footer {
     top: 25px;
     left: 240px;
   }
-  .article2 .huatimg.mb .himg.r img.tshiantshau {
+  .article2 .huatimg.mb .himg.r img.htshiantshau {
     top: -10px;
     width: 155px;
     left: 70px;
   }
-  .article2 .huatimg.mb .himg.r img.hantsuinn {
+  .article2 .huatimg.mb .himg.r img.hhantsuinn {
     width: 160px;
     top: 90px;
     left: 100px;
   }
-  .article2 .huatimg.mb .himg.r img.hinglin {
+  .article2 .huatimg.mb .himg.r img.hhinglin {
     width: 140px;
     top: 130px;
     left: 230px;
-  }
-  .article2 .huatimg.mb .himg.r img.tshiantshau:hover, .article2 .huatimg.mb .himg.r img.hantsuinn:hover, .article2 .huatimg.mb .himg.r img.hinglin:hover {
-    transform: scale(1.15);
   }
   .article2 a {
     color: #ddd;

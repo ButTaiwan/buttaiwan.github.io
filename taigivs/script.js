@@ -1,3 +1,27 @@
+$(".hsiantshau,.htshiantshau").hover(
+  function(){
+    $(".hsiantshau").css("transform","scale(1.15)");
+    $(".htshiantshau").css("transform","scale(1.15)");
+},function(){
+    $(".hsiantshau").css("transform","scale(1)");
+    $(".htshiantshau").css("transform","scale(1)");
+})
+$(".hhantsiinn,.hhantsuinn").hover(
+  function(){
+    $(".hhantsiinn").css("transform","scale(1.15)");
+    $(".hhantsuinn").css("transform","scale(1.15)");
+},function(){
+    $(".hhantsiinn").css("transform","scale(1)");
+    $(".hhantsuinn").css("transform","scale(1)");
+})
+$(".hhingjin,.hhinglin").hover(
+  function(){
+    $(".hhingjin").css("transform","scale(1.15)");
+    $(".hhinglin").css("transform","scale(1.15)");
+},function(){
+    $(".hhingjin").css("transform","scale(1)");
+    $(".hhinglin").css("transform","scale(1)");
+})
 var s = skrollr.init();
 document.body.id = "skrollr-body";
 var font=["源石黑體","源泉圓體","源流明體","源雲明體","全字庫楷書"]
@@ -106,7 +130,7 @@ $(".kip").click(
       $(".t12").text("漢羅濫寫是目前臺語文時行 ê 書寫方式，濟濟無法度用漢字表示 ê 外來語、合音字、虛詞...，就會寫羅馬字表示；嘛有人主張無本字 ê 替代用字攏愛以羅馬字書寫，無仝 ê 標準各有人主張。");
       $(".t13").text("開源、免費、通商業使用佮改作");
       $(".t14").text("使用字型毋但自由閣免錢--ooh! ᕕ( ᐛ )ᕗ 你會當用來做...");
-      $(".t15").html("字咍台語字型 ê 楷體漢字照 CC-by 4.0 授權推出，明體、黑體、圓體漢字是照 SIL Open Font License 授權推出，這代表見若是欲<b>改作字型</b>，，會需要照各自 ê 標準，詳細閱讀授權 ê 規定才隨發布。是講<b>使用字型</b>是完全免費，嘛無需要標示字型來源，印刷、社群圖文、影片、網頁、商業設計攏會通！");
+      $(".t15").html("字咍台語字型 ê 楷體漢字照 CC-by 4.0 授權推出，明體、黑體、圓體漢字是照 SIL Open Font License 授權推出，這代表見若是欲<b>改作字型</b>，會需要照各自 ê 標準，詳細閱讀授權 ê 規定才隨發布。是講<b>使用字型</b>是完全免費，嘛無需要標示字型來源，印刷、社群圖文、影片、網頁、商業設計攏會通！");
       $(".16").text("詳細授權規範請參考：");
       $(".t17").html('<div class="credit"><div class="description"><h1>關於這捾字型</h1><p>字嗨台語字型是 But Ko 繼「字嗨注音體」 ê 後一个作品，共 IVS 字型技術規格用佇台語漢字 ê 標音。補添台灣本土語言基礎教育現場所欠缺的標音字型，閣進一步達成無仝標音系統的對應佮轉換，為著台語漢字 ê 教學攢一个新 ê 家私。</p></div><div class="whiteline"></div><div class="author"><h2>作者｜柯志杰 But Ko</h2><p>「字嗨」社團發起人，提供字型圈自由討論 ê 平台，這久已經是台灣上大的字型交流社群。捌佇 justfont blog 寫過濟濟字體相關知識文章，著《字型散步 Next 》。</p><p>本業是工程師，中、日文各類印刷字體的由來與差異，亦涉入中文編碼、字型技術，捌發表 Unicode 補完計畫、源樣系列思源改作字型、字嗨注音體佮讀音選擇工具。</p></div><div class="helper"><h2>網頁設計｜陳建中 Tân Kiàn-tiong</h2><p>台科大設計系，學習台語文兩冬爾。捌寫過〈台語文字的字型發展現況〉，討論台語文佇電腦環境的顯示問題。</p><h2>網頁協力｜王皓梅</h2><p>台科大設計系商設組出業，這馬佇 justfont 實習。</p></div></div>');
       fonts();
