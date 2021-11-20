@@ -15,7 +15,7 @@ Number.prototype.cut = function() {
 };
 
 function loadData(res, colors) {
-	var initRow = 1;
+	var initRow = 0;
 	var colorCol = 1;
 	var initCol = 2;
 	var dateMap = {};
