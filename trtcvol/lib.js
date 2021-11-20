@@ -15,27 +15,27 @@ Number.prototype.cut = function() {
 };
 
 function loadData(res, colors) {
+	var initRow = 1;
+	var colorCol = 1;
+	var initCol = 2;
 	var dateMap = {};
 	var counts = {};
-	var colorKey = null;
 
-	for (var key in res.feed.entry[0]) {
-		if (key.substring(0, 5) != 'gsx$_') continue;
-		if (res.feed.entry[0][key].$t == 'Codes' || res.feed.entry[0][key].$t == 'Color') colorKey = key;
-		if (key != colorKey) dateMap[key] = ymKey(res.feed.entry[0][key].$t);
+	for (var j=initCol; j<res.values[initRow].length; j++) {
+		dateMap[j] = ymKey(res.values[initRow][j]);
 	}
-	
-	for (var i=1; i<res.feed.entry.length; i++) {
-		var sta = res.feed.entry[i].title.$t;
-		var codes = res.feed.entry[i][colorKey].$t;
+	//console.log(dateMap);
+
+	for (var i=initRow+1; i<res.values.length; i++) {
+		var sta = res.values[i][0];
+		var codes = res.values[i][colorCol];
 		colors[sta] = codes.replace(/\d+[A]?/g, '').split(',');
 		var tmp = codes.split(',');
 		for (var n in tmp) numberlings.push({'c': tmp[n], 's': sta});
 
 		counts[sta] = {};
-		for (var key in res.feed.entry[i]) {
-			if (! dateMap[key]) continue;
-			counts[sta][dateMap[key]] = res.feed.entry[i][key].$t * 1;
+		for (var j=initCol; j<res.values[i].length; j++) {
+			counts[sta][dateMap[j]] = res.values[i][j] * 1;
 		}
 	}
 	numberlings.sort(function(a, b) { return (a.c == b.c) ? 0 : (a.c < b.c ? -1 : 1); });
