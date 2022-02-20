@@ -77,7 +77,7 @@ function loadList() {
 }
 
 var tagname = {
-	trad: '傳統繁體字', kmt: '民國簡體字', draft: '55簡化草案', sg1: '新加坡簡體', er2: '二简第二表',
+	trad: '　繁體字　', kmt: '民國簡體字', draft: '55簡化草案', sg1: '新加坡簡體', er2: '二简第二表',
 	simp64: '简化字1964', simpr: '简化字总表', simp86: '简化字1986', simp13: '通用规范字'
 };
 
@@ -118,8 +118,8 @@ function generateTradTable(section, caption, lists, note) {
 
 		html += '<table class="show">';
 		for (var i in list) {
-			if (i % 10 == 0) html += '<thead><tr><th>簡體字</th><th>' + tagname[tag] + '</th><th>简化字总表</th></tr></thead>';
-			html += '<tr class="s"><th class="' + tags[0] + '">' + list[i].s + '</th><td>' + list[i].x + '</td>';
+			if (i % 10 == 0) html += '<thead><tr><th>　簡體字　</th><th>' + tagname[tag] + '</th><th>简化字总表</th></tr></thead>';
+			html += '<tr class="s"><th class="simpr">' + list[i].s + '</th><td>' + list[i].x + '</td>';
 			html += (list[i].cn == '' ? '<td class="na">' + list[i].s + '</td>' : '<td>' + list[i].cn + '</td>') + '</tr>';
 		}
 		html += '</table>';
