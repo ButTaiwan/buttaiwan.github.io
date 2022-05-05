@@ -63,6 +63,8 @@ body { background-color: #fff; color: #333 }
 }
 
 h1 { font-family: LessonOne; font-size: 300%; margin: 10px 155px }
+h1 a { font-size: 60%; text-decoration: none; padding-left: 1em }
+h1 a:hover { color: #c04 }
 
 #navi { margin: 30px 160px; list-style: none; padding: 0 }
 #navi li { display: inline-block; margin-right: 0.5em; cursor: pointer; white-space: nowrap;}
@@ -116,7 +118,10 @@ p.line { margin: 0.5em 0 }
 	}
 </script>
 <body>
-	<h1>Lesson One</h1>
+	<h1>Lesson One
+		<a href="https://github.com/ButTaiwan/LessonOne">GitHub</a>
+		<a href="https://github.com/ButTaiwan/LessonOne/releases">Download</a>
+	</h1>
 	<ul id="navi">
 		<li class="light"><p onmouseover="setDemo('light')">Light</p></li>
 		<li class="regular"><p onmouseover="setDemo('regular')">Regular</p></li>
