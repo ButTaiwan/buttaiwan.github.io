@@ -67,16 +67,17 @@ body { background-color: #fff; color: #333 }
 	src: url(LessonOne-ExtraItalic.woff) format("woff"), url(LessonOne-ExtraItalic.ttf) format("truetype");
 }
 
-h1 { font-family: LessonOne; font-size: 300%; margin: 10px 155px }
-h1 a { font-size: 60%; text-decoration: none; padding-left: 1em }
-h1 a:hover { color: #c04 }
+#title { margin: 10px 155px }
+#title h1 { font-family: LessonOne; font-size: 300%; display: inline; }
+#title a { font-family: LessonOne; font-size: 200%; font-weight: 600; text-decoration: none; padding-left: 1em }
+#title a:hover { color: #c04 }
 
 #navi { margin: 30px 160px; list-style: none; padding: 0 }
 #navi li { display: inline-block; margin-right: 0.5em; cursor: pointer; white-space: nowrap;}
 #navi li:hover {color: #c04 }
 
 p { font-size: 180%; font-family: LessonOne, sans-serif; line-height: 1.4; margin: 0;}
-p .tag { display: inline-block; width: 140px; text-align: right; margin-right: 20px; vertical-align: top; font: normal 70%/1.4 sans-serif; color: #444 }
+p .tag { display: inline-block; width: 140px; text-align: right; margin-right: 20px; vertical-align: bottom; font: normal 70%/1.4 sans-serif; color: #444 }
 
 .light p, .light #custom { font-weight: 200 }
 .regular p, .regular #custom { font-weight: 400 }
@@ -88,17 +89,22 @@ p .tag { display: inline-block; width: 140px; text-align: right; margin-right: 2
 .italic p, .italic #custom { font-style: italic }
 
 #vfval { font-size: 70% }
-#slider { width: 220px }
+#slider { width: 200px }
 #check { display: inline-block; width: 1.5em; height: 1.5em }
 #custom { border: 0; font-size: 100%; padding: 0; width: 80%; font-family: LessonOne, sans-serif; line-height: 1.5 }
 
 p.line { margin: 0.8em 0 }
 
 @media screen and (max-width: 640px) { 
-	p { font-size: 125% }
+	#title { margin: 10px 20px; }
+	#title h1 { font-size: 240%; float: left; margin: 0 }
+	#title a { display: block; text-align: right; font-size: 120%; padding: 3px 0px; line-height: 1.2 }
+	p { font-size: 120% }
 	p .tag { display: block; font-size: 60%; text-align: left; }
-	#navi { margin: 20px 10px }
+
+	#navi { margin: 20px 10px; clear: both; }
 	#custom { width: 98%; }
+	p .tag { margin-top: 6px }
 }
 
 </style>
@@ -123,10 +129,11 @@ p.line { margin: 0.8em 0 }
 	}
 </script>
 <body>
-	<h1>Lesson One
+	<div id="title">
+		<h1>Lesson One</h1>
 		<a href="https://github.com/ButTaiwan/LessonOne">GitHub</a>
 		<a href="https://github.com/ButTaiwan/LessonOne/releases">Download</a>
-	</h1>
+	</div>
 	<ul id="navi">
 		<li class="light"><p onmouseover="setDemo('light')">Light</p></li>
 		<li class="regular"><p onmouseover="setDemo('regular')">Regular</p></li>
