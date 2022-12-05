@@ -217,6 +217,7 @@ function showMonthUI(ym) {
 	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">⑤</span>高與前<span class="dn">⑤</span>低的月份。';
 	html += '<li><span class="rd">&nbsp;&nbsp;&nbsp;</span>色塊內「<span class="up">↑</span>」及「<span class="dn">↓</span>」分別表示該車站名次比上月上升及下降（數字為排名數）；';
 	html += '「<span class="up">▲</span>」及「<span class="dn">▼</span>」分別表示運量比去年同期成長及衰退最多之車站（數字為依成長或衰退百分比排名之名次）。';
+	html += '<li><a href="./">台北捷運統計</a> | <a href="./ks.html">高雄捷運統計</a> | <a href="./tc.html">台中捷運統計</a>';
 	html += '</ol>';
 	
 	$('#main').html(html);
