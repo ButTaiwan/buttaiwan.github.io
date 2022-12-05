@@ -226,7 +226,7 @@ function showStationUI(sta) {
 	var html = '<h1>' + system + '<select id="selSta">';
 	for (var i in numberlings) {
 		var s = numberlings[i].s;
-		html += '<option value="' + s + '" class="c' + numberlings[i].c.replace(/\d+A?/, '') + '" ' + (s == sta ? ' selected' : '') + '>';
+		html += '<option value="' + s + '" class="c' + numberlings[i].c.replace(/\d+A?/i, '') + '" ' + (s == sta ? ' selected' : '') + '>';
 		html += numberlings[i].c + ' ' + s + '</option>';
 	}
 	html += '</select>站進出旅運量日平均演進</h1>';
