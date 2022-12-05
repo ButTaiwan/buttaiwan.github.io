@@ -1,5 +1,8 @@
 body { background: #000; color: #bbb; font-family: 'Signika Negative', sans-serif; }
 #main { width: 900px; margin: 0 auto }
+
+#foot { margin-top: 15px; text-align: center; color: #aaa }
+
 a { color: #bbb !important }
 h1 { font-size: 28px; font-family: 'Microsoft JhengHei', sans-serif; color: #fff; text-align: center; font-weight: normal }
 h2 { text-align: center; margin: 100px 0; font-size: 40px }

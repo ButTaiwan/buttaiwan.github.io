@@ -217,7 +217,7 @@ function showMonthUI(ym) {
 	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">⑤</span>高與前<span class="dn">⑤</span>低的月份。';
 	html += '<li><span class="rd">&nbsp;&nbsp;&nbsp;</span>色塊內「<span class="up">↑</span>」及「<span class="dn">↓</span>」分別表示該車站名次比上月上升及下降（數字為排名數）；';
 	html += '「<span class="up">▲</span>」及「<span class="dn">▼</span>」分別表示運量比去年同期成長及衰退最多之車站（數字為依成長或衰退百分比排名之名次）。';
-	html += '<li><a href="./">台北捷運統計</a> | <a href="./ks.html">高雄捷運統計</a> | <a href="./ty.html">桃園捷運統計</a> | <a href="./tc.html">台中捷運統計</a>';
+	if (notes) for (var ni in notes) html += '<li>' + notes[i];
 	html += '</ol>';
 	
 	$('#main').html(html);
@@ -286,6 +286,7 @@ function showStationUI(sta) {
 	html += '<li>圈號數字是' + toText(months[0]) + '至' + toText(months[months.length-1]) + '止運量記錄前<span class="up">⑩</span>高與前<span class="dn">⑤</span>低的月份。';
 	html += '<li>若本月運量為通車以來最高，則以「*」註記。';
 	html += '<li>旅客比：在此站進出的旅客比例。計算方式： (日均進出人次/當月全站進出人次總和) × 2';
+	if (notes) for (var ni in notes) html += '<li>' + notes[i];
 	html += '</ol>';
 	
 	$('#main').html(html);
@@ -328,6 +329,8 @@ function init() {
 		ratios = countRatios(counts);
 		setUI();
 	});
+
+	$('#foot').html('<a href="./">台北捷運</a> | <a href="./ks.html">高雄捷運</a> | <a href="./tc.html">台中捷運</a> | <a href="./ty.html">桃園捷運</a>');
 }
 
 $(document).on('change', "#selYM", function() { setUrl($(this).val()); } );
