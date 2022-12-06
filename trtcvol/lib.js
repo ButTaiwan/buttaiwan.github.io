@@ -328,7 +328,7 @@ function init() {
 		setUI();
 	});
 
-	$('#foot').html('<a href="./">台北捷運</a> | <a href="./ks.html">高雄捷運</a> | <a href="./tc.html">台中捷運</a> | <a href="./ty.html">桃園捷運</a>');
+	$('#foot').html('<a href="./">台北捷運</a> | <a href="./nt.html">新北捷運</a> | <a href="./ty.html">桃園捷運</a> | <a href="./tc.html">台中捷運</a> | <a href="./ks.html">高雄捷運</a>');
 }
 
 $(document).on('change', "#selYM", function() { setUrl($(this).val()); } );
