@@ -29,8 +29,8 @@ function loadData(res, colors) {
 	for (var i=initRow+1; i<res.values.length; i++) {
 		var sta = res.values[i][0];
 		var codes = res.values[i][colorCol];
-		colors[sta] = codes.replace(/\d+[Aa]?/g, '').split(',');
-		var tmp = codes.split(',');
+		colors[sta] = codes.replace(/\d+[Aa]?/g, '').split(';');
+		var tmp = codes.split(';');
 		for (var n in tmp) numberlings.push({'c': tmp[n], 's': sta});
 
 		counts[sta] = {};
