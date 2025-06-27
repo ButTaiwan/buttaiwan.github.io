@@ -19,8 +19,9 @@
 			-webkit-user-select: none; /* 禁用文字選擇 */
 			-webkit-tap-highlight-color: transparent; /* 移除點擊高亮效果 */  
         }
-		button { margin: 2px 0; padding: 4px 6px; font-size: 20px }
+		button { display: inline-block; margin: 2px 0; padding: 4px 6px; font-size: 20px }
 		select { margin: 2px 0; padding: 4px 6px; font-size: 16px }
+		span.butt { display: inline-block; margin: 2px 1px; padding: 4px 6px; font-size: 18px; border: 1px solid #666; border-radius: 10px; cursor: pointer; background-color: #eee; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1) }
 
 		@font-face { font-family: LessonOne; src: url('LessonOne-Regular.woff'); font-weight: normal; font-style: normal; }
 		@font-face { font-family: GenYoExt; src: url('GenYoExt3-R.woff'); font-weight: normal; font-style: normal; }
@@ -29,8 +30,8 @@
 		#demo-container span { display: block; line-height: 1.2; }
 		#glyphName { font-family: Consolas, monospace;}
 		#demo-container #charSeq { font-size: 2.6em; line-height: 1.5; font-family: GenYoExt, LessonOne, sans-serif; }
-		#prevButton { font-size: 2.5em; position: absolute; left: 0; top: 0; border: 0 }
-		#nextButton { font-size: 2.5em; position: absolute; right: 0; top: 0; border: 0 }
+		#prevButton { font-size: 2.5em; position: absolute; left: 0; top: 0; border: 0; background: transparent; box-shadow: none; }
+		#nextButton { font-size: 2.5em; position: absolute; right: 0; top: 0; border: 0; background: transparent; box-shadow: none }
 
         #canvas-container { position: relative; width: 360px; height: 360px; border: 1px solid #888; background-color: #fff;}
 		canvas { position: absolute; top: 0; left: 0; width: 360px; height: 360px }
@@ -54,7 +55,7 @@
 		#slider-container { font-family: sans-serif; }
 
         #button-container { display: flex; gap: 5px; justify-content: center }
-		#button-container button { padding: 6px 8px; font-size: 24px; }
+		#button-container span.butt { padding: 6px 8px; font-size: 22px; }
 
         #list-container { display: block; position: fixed; top: 0; left: 0; width: 100%; justify-content: center; background-color: #fff; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; z-index: 1; }
 
@@ -63,10 +64,10 @@
 		#progress-bar { width: 80%; height: 20px; display: block; margin: 0 auto; }
 
 		.dialog { display: none; position: fixed; top: 0; left: 0; width: 90%; height: 100%; background-color: rgba(0, 0, 0, 0.8); color: #fff; z-index: 999; text-align: left; padding: 5% }
-		.dialog h2 { margin-top: 0.5em }
-		.close { position: absolute; right: 15px; top: 5px; font: 3em/1 sans-serif; padding: 3px 10px }
+		.dialog h2 { margin-top: 0.2em }
+		.close { position: absolute; display: block; right: 20px; top: 15px; font: normal 3em/1 sans-serif}
+		.dialog-body { height: 84%; overflow: scroll  }
 
-		#listup-body { height: 84%; overflow: scroll }
 		#listup-body img { display: block; background-color: #fff; width: 50px; height: 50px; float: left; border: 1px solid #ccc; margin: 5px }
 		#listup-body span { display: block; background-color: #666; color: #ddd; width: 50px; height: 50px; float: left; border: 1px solid #ccc; line-height: 50px; text-align: center; font-size: 2em; margin: 5px; font-family: GenYoExt, LessonOne, sans-serif; overflow: hidden; }
 
@@ -85,16 +86,16 @@
 	<div id="list-container">
 		<label for="listSelect">字表：</label>
 		<select id="listSelect"></select>
-		<button id="canvasListButton">👓</button>
-		<button id="findButton">🔍</button>
+		<span class="butt" id="canvasListButton">👓</span>
+		<span class="butt" id="findButton">🔍</span>
     </div>
 
     <div id="demo-container">
 		<span id="glyphName"></span>
 		<span id="charSeq"></span>
 		<span id="glyphNote"></span>
-		<button id="prevButton">👈</button>
-		<button id="nextButton">👉</button>
+		<span class="butt" id="prevButton">👈</span>
+		<span class="butt" id="nextButton">👉</span>
     </div>
 	<div id="canvas-container">
         <canvas id="gridCanvas" width="500" height="500"></canvas>
@@ -107,18 +108,18 @@
 	</div>
 
 	<div id="button-container">
-		<button id="clearButton">🗑️</button>
-		<button id="moveLeftButton">⬅️</button>
-		<button id="moveRightButton">➡️</button>
-		<button id="moveUpButton">⬆️</button>
-		<button id="moveDownButton">⬇️</button>
-		<button id="undoButton">↩️</button>
+		<span class="butt" id="clearButton">🗑️</span>
+		<span class="butt" id="moveLeftButton">⬅️</span>
+		<span class="butt" id="moveRightButton">➡️</span>
+		<span class="butt" id="moveUpButton">⬆️</span>
+		<span class="butt" id="moveDownButton">⬇️</span>
+		<span class="butt" id="undoButton">↩️</span>
     </div>
 
 	<div id="navi-container">
-		<button id="hintButton">💡</button>
-		<button id="settingButton">⚙️</button>
-		<button id="saveButton">下載字型OTF檔案</button>
+		<span class="butt" id="hintButton">💡</span>
+		<span class="butt" id="settingButton">⚙️</span>
+		<span class="butt" id="saveButton">下載字型OTF檔案</span>
     </div>
 	<div id="progress-container">
 		<progress id="progress-bar" value="0" max="100"></progress>
@@ -126,15 +127,15 @@
 	</div>
 
 	<div id="listup-container" class="dialog">
-		<button id="closeListupButton" class="close">×</button>
+		<span id="closeListupButton" class="close">×</span>
 		<h2>字符列表</h2>
-		<div id="listup-body"></div>
+		<div id="listup-body" class="dialog-body"></div>
 	</div>
 
 	<div id="hint-container" class="dialog">
-		<button id="closeHintButton" class="close">×</button>
-		<h2>提示 Ver 0.12</h2>
-		<ul id="hintContent">
+		<span id="closeHintButton" class="close">×</span>
+		<h2>提示 Ver 0.15</h2>
+		<ul id="hintContent" class="dialog-body">
 			<li>本工具由「<a href="https://zi-hi.com" target="_blank">字嗨！</a>」提供。</li>
 			<li>書寫的字表來自「<a href="https://justfont.com/jf7000" target="_blank">jf7000當務字集</a>」。</li>
 			<li>由於所有資料儲存在您瀏覽器本地端，若擔心被瀏覽器清除，建議定期用匯出功能備份資料。</li>
@@ -150,33 +151,35 @@
 	</div>
 
 	<div id="settings-container" class="dialog">
-		<button id="closeSettingsButton" class="close">×</button>
-		<h2>設定</h2>
-		<label for="fontNameEng">字型英文名稱</label>
-		<input id="fontNameEng" type="text" placeholder="請輸入英文名稱" />
-		<br />
-		<label for="fontNameChi">字型中文名稱</label>
-		<input id="fontNameChi" type="text" placeholder="請輸入中文名稱" />
-		<br />
-		<label for="scaleRateSlider">縮放率</label>
-		<input id="scaleRateSlider" type="range" min="50" max="150" value="100" />
-		<span id="scaleRateValue">100%</span>
-		<br />
-		<label for="noFixedWidthFlag">中文字不等寬</label>
-		<input id="noFixedWidthFlag" type="checkbox" />
-		<br />
-		<br />
-		<br />
-		<hr />
-		<label for="clearAllButton">完全清除字型資料</label>
-		<button id="clearAllButton">清除字型資料（無法復原！）</button>
-		<br />
-		<label for="importDataFile">匯入先前備份的資料</label>
-		<input type="file" id="importDataFile" accept=".txt" />
-		<br />
-		<label for="exportDataButton">匯出編輯中資料</label>
-		<button id="exportDataButton">備份工作中的字型資料，共<span id="spanDoneCount"></span>字</button>
-		<br />
+		<div class="dialog-body">
+			<span id="closeSettingsButton" class="close">×</span>
+			<h2>設定</h2>
+			<label for="fontNameEng">字型英文名稱</label>
+			<input id="fontNameEng" type="text" placeholder="請輸入英文名稱" />
+			<br />
+			<label for="fontNameChi">字型中文名稱</label>
+			<input id="fontNameChi" type="text" placeholder="請輸入中文名稱" />
+			<br />
+			<label for="scaleRateSlider">縮放率</label>
+			<input id="scaleRateSlider" type="range" min="50" max="150" value="100" />
+			<span id="scaleRateValue">100%</span>
+			<br />
+			<label for="noFixedWidthFlag">中文字不等寬</label>
+			<input id="noFixedWidthFlag" type="checkbox" />
+			<br />
+			<br />
+			<br />
+			<hr />
+			<label for="clearAllButton">完全清除字型資料</label>
+			<button id="clearAllButton">清除字型資料（無法復原！）</button>
+			<br />
+			<label for="importDataFile">匯入先前備份的資料</label>
+			<input type="file" id="importDataFile" accept=".txt" />
+			<br />
+			<label for="exportDataButton">匯出編輯中資料</label>
+			<button id="exportDataButton">備份工作中的字型資料，共<span id="spanDoneCount"></span>字</button>
+			<br />
+		</div>
 	</div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
