@@ -2,11 +2,11 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>手寫字型產生器 by 字嗨</title>
     <style>
         body {
-            margin: 88px 0 0 0;
+            margin: 64px 0 0 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -14,20 +14,38 @@
             /*height: 80vh;*/
             background-color: #f0f0f0;
 			font-family: sans-serif;
+			overflow: hidden;
+			-webkit-touch-callout: none; /* 禁用長按彈出選單 */
+			-webkit-user-select: none; /* 禁用文字選擇 */
+			-webkit-tap-highlight-color: transparent; /* 移除點擊高亮效果 */  
         }
-		button, select { margin: 2px 0; padding: 6px 8px; font-size: 20px; }
+		button { margin: 2px 0; padding: 4px 6px; font-size: 20px }
+		select { margin: 2px 0; padding: 4px 6px; font-size: 16px }
 
-		@font-face { font-family: GenYoExt; src: url('GenYoExt2-R.woff'); font-weight: normal; font-style: normal; }
+		@font-face { font-family: LessonOne; src: url('LessonOne-Regular.woff'); font-weight: normal; font-style: normal; }
+		@font-face { font-family: GenYoExt; src: url('GenYoExt3-R.woff'); font-weight: normal; font-style: normal; }
 
 		#demo-container { margin-bottom: 5px; width: 360px; position: relative; color: #1123c4; text-align: center; font-family: sans-serif; height: 6em; margin: 10px auto }
 		#demo-container span { display: block; line-height: 1.2; }
 		#glyphName { font-family: Consolas, monospace;}
-		#charSeq { font-size: 3em; font-family: GenYoExt, sans-serif; }
+		#demo-container #charSeq { font-size: 2.6em; line-height: 1.5; font-family: GenYoExt, LessonOne, sans-serif; }
 		#prevButton { font-size: 2.5em; position: absolute; left: 0; top: 0; border: 0 }
 		#nextButton { font-size: 2.5em; position: absolute; right: 0; top: 0; border: 0 }
 
         #canvas-container { position: relative; width: 360px; height: 360px; border: 1px solid #888; background-color: #fff;}
 		canvas { position: absolute; top: 0; left: 0; width: 360px; height: 360px }
+		@media screen and ((max-height: 700px) or (max-width: 380px)) {
+			#canvas-container { width: 320px; height: 320px }
+			canvas { width: 320px; height: 320px  }
+		}
+
+		/* 九宮格底圖樣式 */
+		#gridCanvas {
+			background-image: url('grid.png'); /* 替換為您的九宮格底圖 */
+			background-size: cover;
+			background-repeat: no-repeat;
+			
+		}
         #gridCanvas {  z-index: 0 } /* 九宮格底圖在下方 */
         #drawingCanvas { position: absolute; top: 0; left: 0; z-index: 1 } /* 繪圖畫布在上方 */
 
@@ -49,8 +67,8 @@
 		.close { position: absolute; right: 15px; top: 5px; font: 3em/1 sans-serif; padding: 3px 10px }
 
 		#listup-body { height: 84%; overflow: scroll }
-		#listup-body img { display: block; background-color: #fff; width: 60px; height: 60px; float: left; border: 1px solid #ccc; margin: 5px }
-		#listup-body span { display: block; background-color: #666; color: #ddd; width: 60px; height: 60px; float: left; border: 1px solid #ccc; line-height: 60px; text-align: center; font-size: 2em; margin: 5px; font-family: GenYoExt, sans-serif; overflow: hidden; }
+		#listup-body img { display: block; background-color: #fff; width: 50px; height: 50px; float: left; border: 1px solid #ccc; margin: 5px }
+		#listup-body span { display: block; background-color: #666; color: #ddd; width: 50px; height: 50px; float: left; border: 1px solid #ccc; line-height: 50px; text-align: center; font-size: 2em; margin: 5px; font-family: GenYoExt, LessonOne, sans-serif; overflow: hidden; }
 
 		#settings-container label { display: block; font-size: 1.2em; margin: 0.8em 0 0.2em 0; }
 		#settings-container input[type="text"] { width: 90%; padding: 3px; font-size: 1.2em; }
@@ -65,7 +83,7 @@
 </head>
 <body>
 	<div id="list-container">
-		<label for="listSelect">目前字表：</label>
+		<label for="listSelect">字表：</label>
 		<select id="listSelect"></select>
 		<button id="canvasListButton">👓</button>
 		<button id="findButton">🔍</button>
@@ -115,7 +133,7 @@
 
 	<div id="hint-container" class="dialog">
 		<button id="closeHintButton" class="close">×</button>
-		<h2>提示 Ver 0.11</h2>
+		<h2>提示 Ver 0.12</h2>
 		<ul id="hintContent">
 			<li>本工具由「<a href="https://zi-hi.com" target="_blank">字嗨！</a>」提供。</li>
 			<li>書寫的字表來自「<a href="https://justfont.com/jf7000" target="_blank">jf7000當務字集</a>」。</li>
