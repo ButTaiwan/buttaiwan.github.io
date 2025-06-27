@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手寫字型產生器 by 字嗨</title>
+    <style>
+        body {
+            margin: 88px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /*height: 80vh;*/
+            background-color: #f0f0f0;
+			font-family: sans-serif;
+        }
+		button, select { margin: 2px 0; padding: 6px 8px; font-size: 20px; }
+
+		@font-face { font-family: GenYoExt; src: url('GenYoExt2-R.woff'); font-weight: normal; font-style: normal; }
+
+		#demo-container { margin-bottom: 5px; width: 360px; position: relative; color: #1123c4; text-align: center; font-family: sans-serif; height: 6em; margin: 10px auto }
+		#demo-container span { display: block; line-height: 1.2; }
+		#glyphName { font-family: Consolas, monospace;}
+		#charSeq { font-size: 3em; font-family: GenYoExt, sans-serif; }
+		#prevButton { font-size: 2.5em; position: absolute; left: 0; top: 0; border: 0 }
+		#nextButton { font-size: 2.5em; position: absolute; right: 0; top: 0; border: 0 }
+
+        #canvas-container { position: relative; width: 360px; height: 360px; border: 1px solid #888; background-color: #fff;}
+		canvas { position: absolute; top: 0; left: 0; width: 360px; height: 360px }
+        #gridCanvas {  z-index: 0 } /* 九宮格底圖在下方 */
+        #drawingCanvas { position: absolute; top: 0; left: 0; z-index: 1 } /* 繪圖畫布在上方 */
+
+		#slider-container { text-align: center; margin: 10px 0 }		
+		#lineWidthSlider { width: 260px; display: inline-block; vertical-align: middle; }
+		#slider-container { font-family: sans-serif; }
+
+        #button-container { display: flex; gap: 5px; justify-content: center }
+		#button-container button { padding: 6px 8px; font-size: 24px; }
+
+        #list-container { display: block; position: fixed; top: 0; left: 0; width: 100%; justify-content: center; background-color: #fff; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; z-index: 1; }
+
+		#navi-container { display: flex; gap: 10px; position: fixed; bottom: 0; left: 0; width: 100%; justify-content: center; background-color: #fff; padding: 10px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+		#progress-container { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; padding: 10px; text-align: center; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+		#progress-bar { width: 80%; height: 20px; display: block; margin: 0 auto; }
+
+		.dialog { display: none; position: fixed; top: 0; left: 0; width: 90%; height: 100%; background-color: rgba(0, 0, 0, 0.8); color: #fff; z-index: 999; text-align: left; padding: 5% }
+		.dialog h2 { margin-top: 0.5em }
+		.close { position: absolute; right: 15px; top: 5px; font: 3em/1 sans-serif; padding: 3px 10px }
+
+		#listup-body { height: 84%; overflow: scroll }
+		#listup-body img { display: block; background-color: #fff; width: 60px; height: 60px; float: left; border: 1px solid #ccc; margin: 5px }
+		#listup-body span { display: block; background-color: #666; color: #ddd; width: 60px; height: 60px; float: left; border: 1px solid #ccc; line-height: 60px; text-align: center; font-size: 2em; margin: 5px; font-family: GenYoExt, sans-serif; overflow: hidden; }
+
+		#settings-container label { display: block; font-size: 1.2em; margin: 0.8em 0 0.2em 0; }
+		#settings-container input[type="text"] { width: 90%; padding: 3px; font-size: 1.2em; }
+		#settings-container input[type="file"] { width: 90%; padding: 3px; font-size: 1.2em; }
+		#settings-container input[type="range"] { width: 80%; vertical-align: middle; }
+		#settings-container input[type="checkbox"] { width: 2em; height: 2em }
+
+		#hintContent { padding: 0 1.2em }
+		#hintContent li { margin: 10px 0; line-height: 1.6; }
+		#hintContent a { color: #ff0 !important; text-decoration: underline; }
+    </style>
+</head>
+<body>
+	<div id="list-container">
+		<label for="listSelect">目前字表：</label>
+		<select id="listSelect"></select>
+		<button id="canvasListButton">👓</button>
+		<button id="findButton">🔍</button>
+    </div>
+
+    <div id="demo-container">
+		<span id="glyphName"></span>
+		<span id="charSeq"></span>
+		<span id="glyphNote"></span>
+		<button id="prevButton">👈</button>
+		<button id="nextButton">👉</button>
+    </div>
+	<div id="canvas-container">
+        <canvas id="gridCanvas" width="500" height="500"></canvas>
+        <canvas id="drawingCanvas" width="500" height="500"></canvas>
+    </div>
+
+	<div id="slider-container">
+		<input id="lineWidthSlider" type="range" min="2" max="30" value="12" />
+		<label for="lineWidthSlider"><span id="lineWidthValue">12</span></label>
+	</div>
+
+	<div id="button-container">
+		<button id="clearButton">🗑️</button>
+		<button id="moveLeftButton">⬅️</button>
+		<button id="moveRightButton">➡️</button>
+		<button id="moveUpButton">⬆️</button>
+		<button id="moveDownButton">⬇️</button>
+		<button id="undoButton">↩️</button>
+    </div>
+
+	<div id="navi-container">
+		<button id="hintButton">💡</button>
+		<button id="settingButton">⚙️</button>
+		<button id="saveButton">下載字型OTF檔案</button>
+    </div>
+	<div id="progress-container">
+		<progress id="progress-bar" value="0" max="100"></progress>
+		<span id="progress-text">0%</span>
+	</div>
+
+	<div id="listup-container" class="dialog">
+		<button id="closeListupButton" class="close">×</button>
+		<h2>字符列表</h2>
+		<div id="listup-body"></div>
+	</div>
+
+	<div id="hint-container" class="dialog">
+		<button id="closeHintButton" class="close">×</button>
+		<h2>提示 Ver 0.1</h2>
+		<ul id="hintContent">
+			<li>本工具由「<a href="https://zi-hi.com" target="_blank">字嗨！</a>」提供。</li>
+			<li>書寫的字表來自「<a href="https://justfont.com/jf7000" target="_blank">jf7000當務字集</a>」。</li>
+			<li>由於所有資料儲存在您瀏覽器本地端，若擔心被瀏覽器清除，建議定期用匯出功能備份資料。</li>
+			<li>建議每個字寫好後，就立刻調整位置（漢字原則上置中），這樣可避免事後調整困難。</li>
+			<li>半形文字一律輸出成比例寬，故水平方向位置會被忽略。背景的紅線是基線的參考位置。</li>
+			<li>全形的英數字會使用半形英數字自動產生。</li>
+			<li>當所需的字符齊全時，系統會自動處理直排、組合文字的設定。</li>
+			<li>點擊「下載字型OTF檔案」按鈕來保存您的字型。請注意因為技術的限制，目前本系統所產生的OTF檔案，雖可勉強安裝運作，但並非正確的CID格式，可能在Adobe軟體無法正確識別為CJK字型。</li>
+			<li>本服務所生成的字型檔，若使用上造成任何影響，本服務與作者不負任何責任。</li>
+			<li>轉外框功能使用<a href="https://github.com/kilobtye/potrace" target="_blank">potrace.js</a>專案。</li>
+			<li>OpenType匯出功能使用<a href="https://github.com/opentypejs/opentype.js" target="_blank">opentype.js</a>專案。</li>
+		</ul>
+	</div>
+
+	<div id="settings-container" class="dialog">
+		<button id="closeSettingsButton" class="close">×</button>
+		<h2>設定</h2>
+		<label for="fontNameEng">字型英文名稱</label>
+		<input id="fontNameEng" type="text" placeholder="請輸入英文名稱" />
+		<br />
+		<label for="fontNameChi">字型中文名稱</label>
+		<input id="fontNameChi" type="text" placeholder="請輸入中文名稱" />
+		<br />
+		<label for="scaleRateSlider">縮放率</label>
+		<input id="scaleRateSlider" type="range" min="50" max="150" value="100" />
+		<span id="scaleRateValue">100%</span>
+		<br />
+		<label for="noFixedWidthFlag">中文字不等寬</label>
+		<input id="noFixedWidthFlag" type="checkbox" />
+		<br />
+		<br />
+		<br />
+		<hr />
+		<label for="clearAllButton">完全清除字型資料</label>
+		<button id="clearAllButton">清除字型資料（無法復原！）</button>
+		<br />
+		<label for="importDataFile">匯入先前備份的資料</label>
+		<input type="file" id="importDataFile" accept=".txt" />
+		<br />
+		<label for="exportDataButton">匯出編輯中資料</label>
+		<button id="exportDataButton">備份工作中的字型資料，共<span id="spanDoneCount"></span>字</button>
+		<br />
+	</div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://opentype.js.org/dist/opentype.js"></script>
+    <script src="potrace.js"></script>
+    <script src="glyphlist.js"></script>
+    <script src="fontdrawer.js"></script>
+</body>
+</html>
