@@ -1,4 +1,5 @@
 const upm = 1000;
+let lineWidth = 12; // 預設畫筆粗細為 12
 
 const dbName = 'FontDrawerDB';
 const storeName = 'FontData';
@@ -247,7 +248,6 @@ $(document).ready(async function () {
     const ctx = canvas.getContext('2d');
 	let ratio = canvas.height / $canvas.height();
     let isDrawing = false;
-    let lineWidth = 12; // 預設畫筆粗細為 12
     const undoStack = []; // 儲存畫布狀態的堆疊
 	const $naviContainer = $('#navi-container');
 	const $progressContainer = $('#progress-container');
