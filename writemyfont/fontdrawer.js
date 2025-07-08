@@ -1,7 +1,7 @@
 const upm = 1000;
 let lineWidth = 12; // 預設畫筆粗細為 12
 
-const dbName = 'FontDrawerDB';
+const dbName = fdrawer.dbName || 'FontDrawerDB'; // 使用 fdrawer.dbName，如果未定義則使用預設值
 const storeName = 'FontData';
 let db;
 
@@ -175,7 +175,7 @@ function initListSelect($listSelect) {
 
 async function createFont(glyphs, gidMap, verts, ccmps) {
 	const fontNameEng = await loadFromDB('fontNameEng') || 'MyFreehandFont';
-	const fontNameChi = await loadFromDB('fontNameChi') || '我的手寫體';
+	const fontNameCJK = await loadFromDB('fontNameCJK') || fdrawer.fontNameCJK;
 	
 	const font = new opentype.Font({
 		familyName: fontNameEng,
@@ -194,13 +194,12 @@ async function createFont(glyphs, gidMap, verts, ccmps) {
 	});
 
 	for (var group in font.names) {
-		font.names[group].fontFamily['zh-TW'] = fontNameChi;
-		font.names[group].fullName['zh-TW'] = fontNameChi;
-		//font.names[group].preferredFamily['zh-TW'] = fontNameChi;
+		font.names[group].fontFamily[fdrawer.fontLang] = fontNameCJK;
+		font.names[group].fullName[fdrawer.fontLang] = fontNameCJK;
 	}
 
 	font.tables.os2.achVendID = 'ZIHI';
-	font.tables.os2.ulCodePageRange1 = 0x00100001; // CodePage 950
+	font.tables.os2.ulCodePageRange1 = fdrawer.codePage; // CodePage
 	font.tables.os2.usWinAscent = 920; // Windows ascent
 	font.tables.os2.usWinDescent = 200; // Windows ascent
 	font.tables.os2.xAvgCharWidth = upm;
@@ -236,11 +235,11 @@ $(document).ready(async function () {
 
     // 初始化 IndexedDB
     initDB().then(() => {
-        console.log('IndexedDB 初始化完成');
+        console.log('IndexedDB 起動完成');
 		initCanvas(canvas);	// 初始化九宮格底圖
 		$listSelect.change(); // 觸發一次 change 事件以載入第一個列表
     }).catch((error) => {
-        console.error('IndexedDB 初始化失敗', error);
+        console.error('IndexedDB 起動失敗', error);
     });
 
     const $canvas = $('#drawingCanvas');
@@ -281,7 +280,9 @@ $(document).ready(async function () {
 		nowGlyph = nowList[index]; // 取得當前字符的名稱
 	
 		$('#glyphName').text(nowGlyph); // 更新顯示的字符
-		$('#charSeq').text(glyphMap[nowGlyph].c);
+		$('#charSeq').text(glyphMap[nowGlyph].c).removeClass('vert');
+		if (glyphMap[nowGlyph].v && nowGlyph.indexOf('.vert') > 0) $('#charSeq').addClass('vert');
+
 		$('#glyphNote').text(glyphMap[nowGlyph].n || '');
 
 		// 載入之前的畫布內容
@@ -293,9 +294,17 @@ $(document).ready(async function () {
 	// 儲存畫布的功能
 	async function saveToLocalDB() {
 		const dataURL = canvas.toDataURL();
-		await saveToDB('g_' + nowGlyph, dataURL);
-		const svgData = await saveSVG(nowGlyph, dataURL); // 儲存 SVG 版本
-		await saveToDB('s_' + nowGlyph, svgData);
+		const svgData = await toSVG(nowGlyph, dataURL); // SVG 版本
+
+		if (svgData && svgData != '') {
+			await saveToDB('g_' + nowGlyph, dataURL);
+			await saveToDB('s_' + nowGlyph, svgData);
+		} else {
+			await deleteFromDB('g_' + nowGlyph);
+			await deleteFromDB('s_' + nowGlyph);
+		}
+		
+		//console.log(nowGlyph, dataURL, svgData);
 	}
 
 	// 修改讀取畫布的功能
@@ -315,7 +324,7 @@ $(document).ready(async function () {
 	$('#nextButton').on('click', function () { setGlyph(nowGlyphIndex + 1); }); // 切換到下一個字符
 
     $('#findButton').on('click', function () {
-		var char = prompt('請輸入要找的文字：');
+		var char = prompt(fdrawer.findMsg);
 		if (!char) return; // 如果沒有輸入字符，則不進行任何操作
 		char = char.trim(); // 去除前後空白
 		if (char.length === 0) return;
@@ -333,7 +342,7 @@ $(document).ready(async function () {
 			}
 			if (breakFlag) break;
 		}
-		if (!breakFlag) alert('無此字符！');
+		if (!breakFlag) alert(fdrawer.notFound);
     });
 
     // 更新筆寬
@@ -413,7 +422,7 @@ $(document).ready(async function () {
         $progressText.text(`${percentage}%`);
     }
 
-	async function saveSVG(gname, savedCanvas) {
+	async function toSVG(gname, savedCanvas) {
 		// 建立一個臨時的 canvas
 		const tempCanvas = document.createElement('canvas');
 		const tempCtx = tempCanvas.getContext('2d');
@@ -434,10 +443,10 @@ $(document).ready(async function () {
 					turdSize: 100, // 減少雜訊
 					opttolerance: 0.5, // 調整優化容差
 				});
-				Potrace.process(async function () {
+				Potrace.process(function () {
 					var svgData = Potrace.getSVG(2); // 取得 SVG 資料
 					svgData = svgData.replace(/^.+path d="/, '').replace(/".+$/, '');
-					await saveToDB('s_' + gname, svgData);
+					//await saveToDB('s_' + gname, svgData);
 					resolve(svgData);
 				});
 			};
@@ -450,8 +459,9 @@ $(document).ready(async function () {
 
 		var savedCanvas = await loadFromDB('g_' + gname);
 		if (!savedCanvas) return null;
-
-		return saveSVG(gname, savedCanvas); // 如果不存在 SVG，則儲存並返回新的 SVG
+		var svgData = toSVG(gname, savedCanvas); // 如果不存在 SVG，則儲存並返回新的 SVG
+		await saveToDB('s_' + gname, svgData);
+		return svgData;
 	}
 
 	function createGlyph(unicode, gname, adw, path) {
@@ -570,7 +580,7 @@ $(document).ready(async function () {
 		$progressContainer.hide();
 	});
 
-    // 修改清除畫布的功能
+    // 清除畫布的功能
     $('#clearButton').on('click', async function () {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         undoStack.length = 0; // 清空復原堆疊
@@ -578,12 +588,11 @@ $(document).ready(async function () {
         await deleteFromDB('s_' + nowGlyph); // 清除 IndexedDB 中的資料
     });
 
-
     // 顯示設定畫面
     $('#settingButton').on('click', async function () {
         $('#settings-container').show();
 		$('#fontNameEng').val(await loadFromDB('fontNameEng') || 'MyFreehandFont');
-		$('#fontNameChi').val(await loadFromDB('fontNameChi') || '我的手寫體');
+		$('#fontNameCJK').val(await loadFromDB('fontNameCJK') || fdrawer.fontNameCJK);
 		$('#noFixedWidthFlag').prop('checked', await loadFromDB('noFixedWidthFlag') == 'Y');
 		var scale = await loadFromDB('scaleRate') || 100; // 預設縮放比例為 100%
 		$('#scaleRateSlider').val(scale);
@@ -599,7 +608,7 @@ $(document).ready(async function () {
     });
 
 	$('#fontNameEng').on('change', function () { saveToDB('fontNameEng', $(this).val().replace(/[^a-zA-Z0-9 ]/g, '')); });
-	$('#fontNameChi').on('change', function () { saveToDB('fontNameChi', $(this).val()); });
+	$('#fontNameCJK').on('change', function () { saveToDB('fontNameCJK', $(this).val()); });
 	$('#noFixedWidthFlag').on('click', function () { saveToDB('noFixedWidthFlag', $(this).prop('checked') ? 'Y' : 'N'); });
 	$('#scaleRateSlider').on('input', function () { 
 		var rate = parseInt($(this).val(), 10);
@@ -623,12 +632,12 @@ $(document).ready(async function () {
 					})
 				);
 			} else {
-				$('#listup-body').append(
-					$('<span>').text(glyphMap[gname].c).data('index', i).on('click', function () {
-						setGlyph($(this).data('index')*1);
-						$('#listup-container').hide();
-					})
-				);
+				var cell = $('<span>').text(glyphMap[gname].c).data('index', i).on('click', function () {
+					setGlyph($(this).data('index')*1);
+					$('#listup-container').hide();
+				});
+				if (glyphMap[gname].v && gname.indexOf('.vert') > 0) cell.addClass('vert');
+				$('#listup-body').append(cell);
 			}
 		}
     });
@@ -673,14 +682,14 @@ $(document).ready(async function () {
                 link.href = window.URL.createObjectURL(blob);
                 link.click();
             } else {
-                alert('沒有可匯出的資料。');
+                alert(fdrawer.noDataToExport);
             }
         };
     });
 
     // 匯入資料
     $('#importDataFile').on('change', async function () {
-        if (confirm('確定要匯入資料嗎？這將清除現有的 IndexedDB 資料。')) {
+        if (confirm(fdrawer.importConfirm)) {
             const fileInput = $(this);
             const file = fileInput[0].files[0];
             if (file) {
@@ -697,7 +706,7 @@ $(document).ready(async function () {
                         const value = parts[1].trim();
                         await saveToDB(key, value);
                     }
-                    alert('匯入完成。');
+                    alert(fdrawer.importDone);
                     location.reload(); // 重新載入頁面
                 };
                 reader.readAsText(file);
@@ -709,9 +718,9 @@ $(document).ready(async function () {
 
     // 修改清除所有資料的功能
     $('#clearAllButton').on('click', async function () {
-        if (confirm('確定要清除所有寫過的字嗎？')) {
+        if (confirm(fdrawer.clearConfirm)) {
             await clearDB();
-            alert('已清除。');
+            alert(fdrawer.clearDone);
             location.reload(); // 重新載入頁面
         }
     });

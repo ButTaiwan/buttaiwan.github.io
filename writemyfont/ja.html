@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>手寫字型產生器 by 字嗨</title>
+    <title>フォントを書こう！ by 字嗨</title>
     <style>
         body {
             margin: 64px 0 0 0;
@@ -25,7 +25,6 @@
 		span.butt { display: inline-block; margin: 2px 1px; padding: 4px 6px; font-size: 18px; border: 1px solid #666; border-radius: 10px; cursor: pointer; background-color: #eee; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1) }
 
 		@font-face { font-family: LessonOne; src: url('LessonOne-Regular.woff'); font-weight: normal; font-style: normal; }
-		@font-face { font-family: GenYoExt; src: url('GenYoExt3-R.woff'); font-weight: normal; font-style: normal; }
 
 		#demo-container { margin-bottom: 5px; width: 360px; position: relative; color: #1123c4; text-align: center; font-family: sans-serif; height: 6em; margin: 10px auto }
 		#demo-container span { display: block; line-height: 1.2; }
@@ -71,7 +70,7 @@
 		.dialog-body { height: 84%; overflow: scroll  }
 
 		#listup-body img { display: block; background-color: #fff; width: 50px; height: 50px; float: left; border: 1px solid #ccc; margin: 5px }
-		#listup-body span { display: block; background-color: #666; color: #ddd; width: 50px; height: 50px; float: left; border: 1px solid #ccc; line-height: 50px; text-align: center; font-size: 2em; margin: 5px; font-family: GenYoExt, LessonOne, sans-serif; overflow: hidden; }
+		#listup-body span { display: block; background-color: #666; color: #ddd; width: 50px; height: 50px; float: left; border: 1px solid #ccc; line-height: 50px; text-align: center; font-size: 2em; margin: 5px; font-family: LessonOne, sans-serif; overflow: hidden; }
 		#listup-body span.vert { writing-mode: vertical-rl; font-feature-settings: "vert" }
 
 		#settings-container label { display: block; font-size: 1.2em; margin: 0.8em 0 0.2em 0; }
@@ -86,9 +85,9 @@
 		#hintContent a { color: #ff0 !important; text-decoration: underline; }
     </style>
 </head>
-<body lang="zh-TW">
+<body lang="ja">
 	<div id="list-container">
-		<label for="listSelect">字表：</label>
+		<label for="listSelect">範囲：</label>
 		<select id="listSelect"></select>
 		<span class="butt" id="canvasListButton">👓</span>
 		<span class="butt" id="findButton">🔍</span>
@@ -123,7 +122,7 @@
 	<div id="navi-container">
 		<span class="butt" id="hintButton">💡</span>
 		<span class="butt" id="settingButton">⚙️</span>
-		<span class="butt" id="saveButton">下載字型OTF檔案</span>
+		<span class="butt" id="saveButton">OTFﾌｫﾝﾄﾌｧｲﾙをDL！</span>
     </div>
 	<div id="progress-container">
 		<progress id="progress-bar" value="0" max="100"></progress>
@@ -132,25 +131,24 @@
 
 	<div id="listup-container" class="dialog">
 		<span id="closeListupButton" class="close">×</span>
-		<h2>字符列表</h2>
+		<h2>グリフ一覧</h2>
 		<div id="listup-body" class="dialog-body"></div>
 	</div>
 
 	<div id="hint-container" class="dialog">
 		<span id="closeHintButton" class="close">×</span>
-		<h2>提示 Ver 0.20</h2>
+		<h2>ヒント Ver 0.20</h2>
 		<ul id="hintContent" class="dialog-body">
-			<li>本工具由「<a href="https://zi-hi.com" target="_blank">字嗨！</a>」提供。</li>
-			<li>書寫的字表來自「<a href="https://justfont.com/jf7000" target="_blank">jf7000當務字集</a>」。</li>
-			<li>由於所有資料儲存在您瀏覽器本地端，若擔心被瀏覽器清除，建議定期用匯出功能備份資料。</li>
-			<li>建議每個字寫好後，就立刻調整位置（漢字原則上置中），這樣可避免事後調整困難。</li>
-			<li>半形文字一律輸出成比例寬，故水平方向位置會被忽略。背景的紅線是基線的參考位置。</li>
-			<li>全形的英數字會使用半形英數字自動產生。</li>
-			<li>當所需的字符齊全時，系統會自動處理直排、組合文字的設定。</li>
-			<li>點擊「下載字型OTF檔案」按鈕來保存您的字型。請注意因為技術的限制，目前本系統所產生的OTF檔案，雖可勉強安裝運作，但並非正確的CID格式，可能在Adobe軟體無法正確識別為CJK字型。</li>
-			<li>本服務所生成的字型檔，若使用上造成任何影響，本服務與作者不負任何責任。</li>
-			<li>轉外框功能使用<a href="https://github.com/kilobtye/potrace" target="_blank">potrace.js</a>專案。</li>
-			<li>OpenType匯出功能使用<a href="https://github.com/opentypejs/opentype.js" target="_blank">opentype.js</a>專案。</li>
+			<li>このツールは「<a href="https://x.com/buttaiwan" target="_blank">@buttaiwan</a>」が作りました（半分ぐらいはAIに放り投げたが）。</li>
+			<li>すべてのデータはブラウザに保存されているため、未完成のフォントは定期的にバックアップすることをおすすめします。</li>
+			<li>文字を書いたら、直ちに位置の調整をおすすめします。一般的に仮名と漢字は中間揃え、欧文はベースライン揃えです。</li>
+			<li>半角文字は自動的にプロポーション幅に出力されるため、水平方向の位置は無視されます。</li>
+			<li>全角の数字とアルファベットなどは、半角のグリフを用いて自動的に生成されます。</li>
+			<li>横書き用・縦書き用のグリフ両方書いてあれば、縦書きの設定は自動的に行います。</li>
+			<li>「OTFﾌｫﾝﾄﾌｧｲﾙをDL！」ボタンを押すと、フォントファイルがダウンロードされます。AirDropなどでパソコンに転送してご利用ください。</li>
+			<li>技術的制限上、現在このツールが生成したOTFファイルは、インストールして利用すること自体は可能だが、正確なCIDフォーマットではないため、Adobeアプリケーションなどでは日本語フォントとして扱われない恐れがあります。</li>
+			<li>本サービスの利用によって、利用者及び第三者に生じた損害においては、サービス提供者は責任を負わないものとします。</li>
+			<li>素晴らしい<a href="https://github.com/kilobtye/potrace" target="_blank">potrace.js</a>と<a href="https://github.com/opentypejs/opentype.js" target="_blank">opentype.js</a>ライブラリーにありがとう！</li>
 		</ul>
 	</div>
 
@@ -158,32 +156,32 @@
 		<div class="dialog-body">
 			<span id="closeSettingsButton" class="close">×</span>
 			<h2>設定</h2>
-			<label for="fontNameEng">字型英文名稱</label>
-			<input id="fontNameEng" type="text" placeholder="請輸入英文名稱" />
+			<label for="fontNameEng">フォント名（英語）</label>
+			<input id="fontNameEng" type="text" placeholder="半角英数字で入力してください" />
 			<br />
-			<label for="fontNameCJK">字型中文名稱</label>
-			<input id="fontNameCJK" type="text" placeholder="請輸入中文名稱" />
+			<label for="fontNameCJK">フォント名（日本語）</label>
+			<input id="fontNameCJK" type="text" placeholder="日本語フォント名を入力してください" />
 			<br />
-			<label for="scaleRateSlider">縮放率</label>
+			<label for="scaleRateSlider">拡大率</label>
 			<input id="scaleRateSlider" type="range" min="50" max="150" value="100" />
 			<span id="scaleRateValue">100%</span>
-			<span class="note">由於手寫為了避免超框，容易不經意把字寫得比較小。這裡可以整體放大文字倍率。</span>
+			<span class="note">手書きの場合、枠をはみ出さないように書くと、どうしても文字がやや小さくなりがちですが、それを補正するための拡大率です。</span>
 			<br />
-			<label for="noFixedWidthFlag">中文字不等寬</label>
+			<label for="noFixedWidthFlag">全角文字もプロポーション幅</label>
 			<input id="noFixedWidthFlag" type="checkbox" />
-			<span class="note">設定為不等寬會更像手寫字型，但可能不適合用於直排。</span>
+			<span class="note">手書きフォントの性格上、固定幅よりもプロポーション幅の方が自然に見える場合がありますが、縦書きとしての利用に不向きです。</span>
 			<br />
 			<br />
 			<br />
 			<hr />
-			<label for="clearAllButton">完全清除字型資料</label>
-			<button id="clearAllButton">清除字型資料（無法復原！）</button>
+			<label for="clearAllButton">フォントデータを削除する</label>
+			<button id="clearAllButton">全てのデータを削除（復元不能！）</button>
 			<br />
-			<label for="importDataFile">匯入先前備份的資料</label>
+			<label for="importDataFile">バックアップデータの読み込み</label>
 			<input type="file" id="importDataFile" accept=".txt" />
 			<br />
-			<label for="exportDataButton">匯出編輯中資料</label>
-			<button id="exportDataButton">備份工作中的字型資料，共<span id="spanDoneCount"></span>字</button>
+			<label for="exportDataButton">データをバックアップする</label>
+			<button id="exportDataButton">作業中のデータをDL。全<span id="spanDoneCount"></span>字</button>
 			<br />
 		</div>
 	</div>
@@ -191,22 +189,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://opentype.js.org/dist/opentype.js"></script>
     <script src="potrace.js"></script>
-    <script src="cglyphlist.js"></script>
 	<script>
 		const fdrawer = {
-			dbName: 'FontDrawerDB',
-			fontNameCJK: '我的手寫字型',
-			fontLang: 'zh-TW',
-			codePage: 0x00100001,
-			findMsg: '請輸入要找的文字：',
-			notFound: '無此字符！',
-			noDataToExport: '沒有可匯出的資料。',
-			importConfirm: '確定要匯入資料嗎？這將清除目前編輯中的所有資料。',
-			importDone: '匯入完成。',
-			clearConfirm: '確定要清除所有寫過的字嗎？',
-			clearDone: '已清除。'
+			dbName: 'FontDrawerDBja',
+			fontNameCJK: '私の手書きフォント',
+			fontLang: 'ja',
+			codePage: 0x00020001,
+			findMsg: '探したい文字をご入力ください：',
+			notFound: '該当グリフが見つかりません。',
+			noDataToExport: 'データがありません。',
+			importConfirm: '編集中のデータが削除されます。データの読み込みしますか？',
+			importDone: '読み込みしました',
+			clearConfirm: '編集中のデータを破棄しますか？',
+			clearDone: '削除しました'
 		};
 	</script>
+    <script src="jglyphlist.js"></script>
     <script src="fontdrawer.js"></script>
 </body>
 </html>
