@@ -137,18 +137,19 @@
 
 	<div id="hint-container" class="dialog">
 		<span id="closeHintButton" class="close">×</span>
-		<h2>ヒント Ver 0.20</h2>
+		<h2>ヒント Ver 0.21</h2>
 		<ul id="hintContent" class="dialog-body">
-			<li>このツールは「<a href="https://x.com/buttaiwan" target="_blank">@buttaiwan</a>」が作りました（半分ぐらいはAIに放り投げたが）。</li>
-			<li>すべてのデータはブラウザに保存されているため、未完成のフォントは定期的にバックアップすることをおすすめします。</li>
-			<li>文字を書いたら、直ちに位置の調整をおすすめします。一般的に仮名と漢字は中間揃え、欧文はベースライン揃えです。</li>
-			<li>半角文字は自動的にプロポーション幅に出力されるため、水平方向の位置は無視されます。</li>
-			<li>全角の数字とアルファベットなどは、半角のグリフを用いて自動的に生成されます。</li>
-			<li>横書き用・縦書き用のグリフ両方書いてあれば、縦書きの設定は自動的に行います。</li>
-			<li>「OTFﾌｫﾝﾄﾌｧｲﾙをDL！」ボタンを押すと、フォントファイルがダウンロードされます。AirDropなどでパソコンに転送してご利用ください。</li>
-			<li>技術的制限上、現在このツールが生成したOTFファイルは、インストールして利用すること自体は可能だが、正確なCIDフォーマットではないため、Adobeアプリケーションなどでは日本語フォントとして扱われない恐れがあります。</li>
-			<li>本サービスの利用によって、利用者及び第三者に生じた損害においては、サービス提供者は責任を負わないものとします。</li>
-			<li>素晴らしい<a href="https://github.com/kilobtye/potrace" target="_blank">potrace.js</a>と<a href="https://github.com/opentypejs/opentype.js" target="_blank">opentype.js</a>ライブラリーにありがとう！</li>
+			<li>このツールは「<a href="https://x.com/buttaiwan" target="_blank">@buttaiwan</a>」が作りました（半分くらいはAIに放り投げたがｗ）。</li>
+			<li>すべてのデータはブラウザに保存されるため、未完成のフォントは定期的にバックアップすることをおすすめします。</li>
+			<li>文字を書いたら、直ちに位置の調整を行うことをおすすめします。一般的に仮名と漢字は中央揃え、欧文はベースライン揃えです（赤いラインは目安）。</li>
+			<li>半角文字は自動的にプロポーショナル幅で出力されるため、水平方向の位置は無視されます。</li>
+			<li>全角の数字やアルファベットなどは、半角のグリフを用いて自動的に生成されます。</li>
+			<li>横書き用・縦書き用のグリフが両方書かれている場合、縦書きの設定は自動的に行われます。</li>
+			<li>「OTFフォントファイルをDL！」ボタンを押すと、フォントファイルがダウンロードされます。AirDropなどでパソコンに転送してご利用ください。</li>
+			<li>生成されたフォントのあらゆる権利は、利用者に属します。公開も商用利用もご自由にどうぞ。</li>
+			<li>技術的制限上、現在このツールで生成されたOTFファイルは、インストールして利用すること自体は可能ですが、正確なCIDフォーマットではないため、Adobeアプリケーションなどでは日本語フォントとして認識されない恐れがあります。</li>
+			<li>本サービスの利用によって、利用者および第三者に生じた損害について、サービス提供者は責任を負わないものとします。</li>
+			<li>素晴らしい<a href="https://github.com/kilobtye/potrace" target="_blank">potrace.js</a>と<a href="https://github.com/opentypejs/opentype.js" target="_blank">opentype.js</a>ライブラリに感謝します！</li>
 		</ul>
 	</div>
 
@@ -167,9 +168,9 @@
 			<span id="scaleRateValue">100%</span>
 			<span class="note">手書きの場合、枠をはみ出さないように書くと、どうしても文字がやや小さくなりがちですが、それを補正するための拡大率です。</span>
 			<br />
-			<label for="noFixedWidthFlag">全角文字もプロポーション幅</label>
+			<label for="noFixedWidthFlag">全角文字もプロポーショナル幅</label>
 			<input id="noFixedWidthFlag" type="checkbox" />
-			<span class="note">手書きフォントの性格上、固定幅よりもプロポーション幅の方が自然に見える場合がありますが、縦書きとしての利用に不向きです。</span>
+			<span class="note">手書きフォントの性格上、固定幅よりもプロポーショナル幅の方が自然に見える場合がありますが、縦書きとしての利用に不向きです。</span>
 			<br />
 			<br />
 			<br />
