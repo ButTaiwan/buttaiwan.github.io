@@ -538,7 +538,7 @@ $(document).ready(async function () {
 				unicode = parseInt(RegExp.$1, 16); // 轉換為 Unicode 編碼
 			} else if (gname.match(/^u([0-9A-F]{5})$/i)) {
 				unicode = parseInt(RegExp.$1, 16); // 轉換為 Unicode 編碼
-			} else if (glyphMap[gname].c.length == 1) {
+			} else if (gname.indexOf('.vert') < 0 && glyphMap[gname].c.length == 1) {
 				unicode = glyphMap[gname].c.charCodeAt(0); // 使用字符的 Unicode 編碼
 			}
 			var glyph = createGlyph(unicode, gname, adw, path);
