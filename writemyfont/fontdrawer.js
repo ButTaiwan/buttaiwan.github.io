@@ -124,36 +124,45 @@ async function initCanvas(canvas) {
 	canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
 	canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
 
+	var scale = await loadFromDB('scaleRate') || 100; // 縮放比例，預設為 100%
+	scale = parseInt(scale, 10) / 100; // 轉換為小數
+	//var scaleoff = (upm - scale * upm) / 2; // 縮放偏移量
+
 	// 繪製九宮格底圖
 	const gridCanvas = document.getElementById('gridCanvas');
 	const gridCtx = gridCanvas.getContext('2d');
-	const gridWidth = gridCanvas.width / 3;
-	const gridHeight = gridCanvas.height / 3;
+	gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
+
+	const emWidth = gridCanvas.width / scale;			// 字身框寬度
+	const emHeight = gridCanvas.height / scale;			// 字身框高度
+	const gridXOff = (gridCanvas.width - emWidth) / 2;	// X 軸偏移量
+	const gridYOff = (gridCanvas.height - emHeight) / 2;	// X 軸偏移量
+
+	//const gridWidth = Math.round(gridCanvas.width / scale / 3);		// 每格寬度
+	//const gridHeight = Math.round(gridCanvas.height / scale / 3);	// 每格高度
 
 	gridCtx.strokeStyle = '#cccccc';
 	gridCtx.lineWidth = 1;
 
-	// 繪製垂直線
-	for (let i = 1; i < 3; i++) {
+	// 繪製格線
+	for (let i = 0; i <= 3; i++) {
 		gridCtx.beginPath();
-		gridCtx.moveTo(i * gridWidth, 0);
-		gridCtx.lineTo(i * gridWidth, gridCanvas.height);
+		gridCtx.moveTo(gridXOff + emWidth * i / 3, gridYOff);
+		gridCtx.lineTo(gridXOff + emWidth * i / 3, gridYOff + emHeight);
 		gridCtx.stroke();
-	}
 
-	// 繪製水平線
-	for (let i = 1; i < 3; i++) {
 		gridCtx.beginPath();
-		gridCtx.moveTo(0, i * gridHeight);
-		gridCtx.lineTo(gridCanvas.width, i * gridHeight);
+		gridCtx.moveTo(gridXOff, gridYOff + emHeight * i / 3);
+		gridCtx.lineTo(gridXOff + emWidth, gridYOff + emHeight * i / 3);
 		gridCtx.stroke();
+
 	}
 
 	// 繪製基線
 	gridCtx.strokeStyle = '#eebbbb';	// 基線顏色
 	gridCtx.beginPath();
-	gridCtx.moveTo(0, gridCanvas.height*0.72);
-	gridCtx.lineTo(gridCanvas.width, gridCanvas.height*0.72);
+	gridCtx.moveTo(gridXOff, gridYOff + emHeight*0.72);
+	gridCtx.lineTo(gridXOff + emWidth, gridYOff + emHeight*0.72);
 	gridCtx.stroke();
 
 	// 載入筆寬設定
@@ -233,15 +242,6 @@ async function createFont(glyphs, gidMap, verts, ccmps) {
 $(document).ready(async function () {
 	const $listSelect = $('#listSelect');
 
-    // 初始化 IndexedDB
-    initDB().then(() => {
-        console.log('IndexedDB 起動完成');
-		initCanvas(canvas);	// 初始化九宮格底圖
-		$listSelect.change(); // 觸發一次 change 事件以載入第一個列表
-    }).catch((error) => {
-        console.error('IndexedDB 起動失敗', error);
-    });
-
     const $canvas = $('#drawingCanvas');
     const canvas = $canvas[0];
     const ctx = canvas.getContext('2d');
@@ -252,6 +252,15 @@ $(document).ready(async function () {
 	const $progressContainer = $('#progress-container');
     const $progressBar = $('#progress-bar');
     const $progressText = $('#progress-text');
+
+    // 初始化 IndexedDB
+    initDB().then(() => {
+        console.log('IndexedDB 起動完成');
+		initCanvas(canvas);	// 初始化九宮格底圖
+		$listSelect.change(); // 觸發一次 change 事件以載入第一個列表
+    }).catch((error) => {
+        console.error('IndexedDB 起動失敗', error);
+    });
 
 
 	let nowList = null;
@@ -361,17 +370,31 @@ $(document).ready(async function () {
         ctx.moveTo(x * ratio, y * ratio);
 	});
 
+	var eraseMode = false;
+
+	$('#penButton').on('click', function () {
+		$('#penButton').addClass('use');
+		$('#eraserButton').removeClass('use');
+		eraseMode = false;
+	});
+	$('#eraserButton').on('click', function () {	
+		$('#eraserButton').addClass('use');
+		$('#penButton').removeClass('use');
+		eraseMode = true; // 切換到橡皮擦模式
+	});
+
     // 繪製中
 	$canvas.on('mousemove touchmove', function (event) {
         if (!isDrawing) return;
         const { x, y } = getCanvasCoordinates(event);
 
+		ctx.globalCompositeOperation = eraseMode ? "destination-out" : "source-over"; // 如果是橡皮擦模式，則使用 destination-out，否則使用 source-over
 		// 毛筆模式：動態調整線條粗細
 		ctx.lineWidth = lineWidth * 0.7 + Math.random() * lineWidth * 0.6; // 粗細隨機變化
 		ctx.lineJoin = 'round'; // 線條連接處為圓角
 		ctx.lineCap = 'round'; // 線條端點為圓角
         ctx.lineTo(x*ratio, y*ratio);
-        ctx.strokeStyle = 'black';
+		ctx.strokeStyle = 'black';
         ctx.stroke();
     });
 
@@ -613,7 +636,8 @@ $(document).ready(async function () {
 	$('#scaleRateSlider').on('input', function () { 
 		var rate = parseInt($(this).val(), 10);
 		$('#scaleRateValue').text(rate + '%');
-		saveToDB('scaleRate', rate); 
+		saveToDB('scaleRate', rate);
+		initCanvas(canvas);
 	});
 
 	// 顯示字表畫面
